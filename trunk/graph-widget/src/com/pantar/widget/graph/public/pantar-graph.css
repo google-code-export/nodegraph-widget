@@ -1,0 +1,30 @@
+.node {
+    background: url("images/automatic.png");
+    width: 70px;
+    height: 50px;	
+}
+.node.selected {
+    background: url("images/automatic-selected.png");
+    width: 70px;
+    height: 50px;   
+}
+.node.nodetype-start-node {
+	background: url("images/begin.png");
+	width: 36px;
+    height: 36px;
+}
+.node.nodetype-start-node.selected {
+    background: url("images/begin-selected.png");
+    width: 36px;
+    height: 36px;
+}
+.node.nodetype-end-node {
+    background: url("images/end.png");
+	width: 36px;
+    height: 36px;
+}
+.node.nodetype-end-node.selected {
+    background: url("images/end-selected.png");
+    width: 36px;
+    height: 36px;
+}
