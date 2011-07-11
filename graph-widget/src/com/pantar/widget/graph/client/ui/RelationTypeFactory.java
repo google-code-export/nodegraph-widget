@@ -20,7 +20,7 @@ public class RelationTypeFactory {
 			relationType = new LineRelationType();
 
 		} else if (RelationTypeEnum.BEZIER.equals(pRelationTypeEnum)) {
-			relationType = new LineRelationType();
+			relationType = new BezierRelationType();
 		}
 
 		return relationType;
