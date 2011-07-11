@@ -23,7 +23,7 @@
 		<init-param>
             <description>Application Widgetset</description>
 			<param-name>widgetset</param-name>
-			<param-value>com.pantar.widget.graph.widgetset.Graph_widgetWidgetset</param-value>
+			<param-value>com.pantar.widget.graph.GraphWidget</param-value>
 		</init-param>
 	</servlet>
 	
