@@ -7,6 +7,7 @@ import org.vectomatic.dom.svg.OMSVGPathElement;
 import org.vectomatic.dom.svg.OMSVGPathSegCurvetoCubicAbs;
 import org.vectomatic.dom.svg.OMSVGPathSegMovetoAbs;
 import org.vectomatic.dom.svg.utils.OMSVGParser;
+import org.vectomatic.dom.svg.utils.SVGConstants;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.touch.client.Point;
@@ -28,14 +29,14 @@ public class BezierRelationType extends AbstractRelationType implements Relation
 	public BezierRelationType() {
 		this.omsvgPathElement = OMSVGParser.currentDocument().createSVGPathElement();
 		// this.omsvgPathElement.setId(this.id);
-		// this.omsvgPathElement.setAttribute(SVGConstants.CSS_STROKE_WIDTH_PROPERTY,
-		// "2");
-		// this.omsvgPathElement.setAttribute(SVGConstants.CSS_STROKE_VALUE,
-		// "black");
-		// this.omsvgPathElement.setAttribute(SVGConstants.CSS_FILL_OPACITY_PROPERTY,
-		// "0");
-		// this.omsvgPathElement.setAttribute(SVGConstants.CSS_STROKE_DASHARRAY_PROPERTY,
-		// "5,5");
+		 this.omsvgPathElement.setAttribute(SVGConstants.CSS_STROKE_WIDTH_PROPERTY,
+		 "2");
+		 this.omsvgPathElement.setAttribute(SVGConstants.CSS_STROKE_VALUE,
+		 "black");
+		 this.omsvgPathElement.setAttribute(SVGConstants.CSS_FILL_OPACITY_PROPERTY,
+		 "0");
+		 this.omsvgPathElement.setAttribute(SVGConstants.CSS_STROKE_DASHARRAY_PROPERTY,
+		 "5,5");
 		final OMSVGPathSegMovetoAbs moveAbs = this.omsvgPathElement.createSVGPathSegMovetoAbs(0, 0);
 		final OMSVGPathSegCurvetoCubicAbs curve = this.omsvgPathElement.createSVGPathSegCurvetoCubicAbs(0, 0, 0, 0, 0, 0);
 

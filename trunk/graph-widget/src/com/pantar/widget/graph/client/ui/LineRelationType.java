@@ -27,10 +27,10 @@ public class LineRelationType implements RelationType {
 	public LineRelationType() {
 		this.omsvgLineElement = OMSVGParser.currentDocument().createSVGLineElement(0, 0, 0, 0);
 		// this.omsvgLineElement.setId(this.id);
-		// this.omsvgLineElement.setAttribute(SVGConstants.CSS_STROKE_WIDTH_PROPERTY,
-		// "2");
-		// this.omsvgLineElement.setAttribute(SVGConstants.CSS_STROKE_VALUE,
-		// "black");
+		 this.omsvgLineElement.setAttribute(SVGConstants.CSS_STROKE_WIDTH_PROPERTY,
+		 "2");
+		 this.omsvgLineElement.setAttribute(SVGConstants.CSS_STROKE_VALUE,
+		 "black");
 	}
 
 	/**

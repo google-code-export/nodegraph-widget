@@ -125,7 +125,7 @@ public class Relation {
 		final double x2 = this.to.getCenterX();
 		final double y2 = this.to.getCenterY();
 
-		if ((x1 == x2) && (y1 == y2)) {
+		if ((x1 == x2) && (y1 == y2) && this.from.equals(this.to)) {
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;

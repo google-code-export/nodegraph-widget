@@ -111,11 +111,16 @@ public class VGraphComponent extends Composite implements Paintable, ClickHandle
 		final Node node2 = new Node(this, "2", NodeTypeEnum.CUSTOM_NODE);
 		node2.setSelected(Boolean.TRUE);
 
-		final Relation r1 = new Relation(this, node1, node2);
-		final Relation r2 = new Relation(this, node1, node1);
+		final Node node3 = new Node(this, "3", NodeTypeEnum.CUSTOM_NODE);
+		node2.setSelected(Boolean.TRUE);
+
+		final Relation r1 = new Relation(this, node1, node2, RelationTypeEnum.BEZIER, new DefaultRelationStyle());
+		final Relation r2 = new Relation(this, node1, node1, RelationTypeEnum.BEZIER, new DefaultRelationStyle());
+		final Relation r3 = new Relation(this, node1, node3, RelationTypeEnum.LINE, new DefaultRelationStyle());
 
 		this.add(node1);
 		this.add(node2);
+		this.add(node3);
 	}
 
 	/**
