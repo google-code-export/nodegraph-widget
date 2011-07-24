@@ -3,87 +3,59 @@
  */
 package com.pantar.widget.graph.server;
 
+import java.util.HashMap;
+
+import com.pantar.widget.graph.shared.GraphConstants;
+
 /**
  * @author mauro.monti
  * 
  */
-public class DefaultRelationStyle implements RelationStyle {
-
+public class DefaultRelationStyle extends HashMap<String, String> implements RelationStyle {
+	
 	/**
 	 * 
 	 */
-	private boolean dashedStroke;
-
+	private static final long serialVersionUID = -7737781018306578215L;
+	
 	/**
 	 * 
 	 */
-	private String dashedLinePattern;
-
-	/**
-	 * 
-	 */
-	private int strokeWidth = 2;
-
-	/**
-	 * 
-	 */
-	private String strokeColor = "black";
+	private static final String DEFAULT_STROKE_WIDTH = "2";
 
 	/**
 	 * 
 	 */
 	public DefaultRelationStyle() {
+		this.put(GraphConstants.DOM.CSS_STROKE_WIDTH_PROPERTY, DefaultRelationStyle.DEFAULT_STROKE_WIDTH);
+		this.put(GraphConstants.DOM.CSS_STROKE_VALUE, GraphConstants.DOM.CSS_BLACK_VALUE);
 	}
 
 	/**
 	 * 
 	 */
-	public DefaultRelationStyle(final String pStrokeColor, final int pStrokeWidth) {
-		this.strokeColor = pStrokeColor;
-		this.strokeWidth = pStrokeWidth;
+	public DefaultRelationStyle(final String pStrokeColor, final Integer pStrokeWidth) {
+		this.put(GraphConstants.DOM.CSS_STROKE_WIDTH_PROPERTY, pStrokeWidth.toString());
+		this.put(GraphConstants.DOM.CSS_STROKE_VALUE, pStrokeColor);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getStrokeColor() {
-		return this.strokeColor;
+	public void setContinuousLine() {
+		this.remove(GraphConstants.DOM.CSS_STROKE_DASHARRAY_PROPERTY);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int getStrokeWidth() {
-		return this.strokeWidth;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Boolean isDashedStroke() {
-		return this.dashedStroke;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setDashedStroke(final Boolean pDashedStroke) {
-		if (pDashedStroke && this.dashedLinePattern.isEmpty()) {
-			this.setDashedStrokePattern(2, 2);
+	public void setDashedStroke(final Integer pLine, final Integer pSpace) {
+		if (pLine == null || pSpace == null) {
+			return;
 		}
-		this.dashedStroke = pDashedStroke;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setDashedStrokePattern(final int pLine, final int pSpace) {
-		this.dashedLinePattern = pLine + "," + pSpace;
+		this.put(GraphConstants.DOM.CSS_STROKE_DASHARRAY_PROPERTY, pLine + "," + pSpace);
 	}
 
 }

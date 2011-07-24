@@ -5,6 +5,8 @@ package com.pantar.widget.graph.client.ui;
 
 import java.util.Set;
 
+import com.pantar.widget.graph.shared.model.RelationTypeEnum;
+
 /**
  * @author mauro.monti
  * 
@@ -22,4 +24,8 @@ public interface RelationStyle {
 	 */
 	String getStyleValue(String pProperty);
 
+	/**
+	 * @return
+	 */
+	RelationTypeEnum getRelationType();
 }

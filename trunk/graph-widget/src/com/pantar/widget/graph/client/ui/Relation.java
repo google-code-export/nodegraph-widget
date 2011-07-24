@@ -1,7 +1,9 @@
 package com.pantar.widget.graph.client.ui;
 
 import com.google.gwt.touch.client.Point;
+import com.pantar.widget.graph.client.ui.factories.RelationTypeFactory;
 import com.pantar.widget.graph.shared.GraphConstants;
+import com.pantar.widget.graph.shared.model.RelationTypeEnum;
 
 /**
  * @author mauro.monti
@@ -32,13 +34,13 @@ public class Relation {
 	/**
 	 * 
 	 */
-	protected RelationTypeEnum relationTypeEnum;
+	protected RelationType relationType;
 
 	/**
 	 * 
 	 */
-	protected RelationType relationType;
-
+	protected RelationTypeEnum relationTypeEnum;
+	
 	/**
 	 * 
 	 */
@@ -67,12 +69,11 @@ public class Relation {
 		if (pNodeTo == null) {
 			throw new IllegalArgumentException("Node TO cannot be null");
 		}
-
 		this.parent = pParent;
 		this.from = pNodeFrom;
 		this.to = pNodeTo;
-		this.relationStyle = pRelationStyle;
 		this.relationTypeEnum = pRelationTypeEnum;
+		this.relationStyle = pRelationStyle;
 
 		this.initializeRelation();
 	}
@@ -81,22 +82,18 @@ public class Relation {
 	 * 
 	 */
 	private void initializeRelation() {
-		this.id = GraphConstants.RELATION_NAME + "-" + this.from.getId() + "-" + this.to.getId();
+		this.id = GraphConstants.MODEL.RELATION_NAME + "-" + this.from.getId() + "-" + this.to.getId();
 
 		if (this.isSelfRelation()) {
-			this.relationType = RelationTypeFactory.getRelation(RelationTypeEnum.BEZIER);
+			this.relationType = RelationTypeFactory.getRelation(RelationTypeEnum.BEZIER, this.relationStyle);
 		} else {
-			this.relationType = RelationTypeFactory.getRelation(this.relationTypeEnum);
+			this.relationType = RelationTypeFactory.getRelation(this.relationTypeEnum, this.relationStyle);
 		}
 
 		this.relationType.getElement().setId(this.id);
 
 		this.from.addOutgoing(this);
 		this.to.addIncoming(this);
-
-		for (final String key : this.relationStyle.getKeys()) {
-			this.relationType.getElement().setAttribute(key, this.relationStyle.getStyleValue(key));
-		}
 
 		this.parent.add(this.relationType.getElement());
 	}

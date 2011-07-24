@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.pantar.widget.graph.server;
+package com.pantar.widget.graph.server.events;
 
 import java.beans.PropertyChangeEvent;
 
@@ -10,12 +10,6 @@ import java.beans.PropertyChangeEvent;
  * 
  */
 public interface PropertyChangeCallback {
-
-    /**
-     * @param pPropertyName
-     * @return
-     */
-    Boolean evaluatePropertyName(String pPropertyName);
 
     /**
      * @param propertyChangeEvent

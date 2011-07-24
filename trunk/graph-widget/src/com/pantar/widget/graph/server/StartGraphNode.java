@@ -3,20 +3,17 @@
  */
 package com.pantar.widget.graph.server;
 
+import com.pantar.widget.graph.shared.model.TypeEnum;
+
 /**
  * @author mauro.monti
  * 
  */
 public class StartGraphNode extends DefaultNode {
 
-    public StartGraphNode() {
-        super();
-    }
-
-    public StartGraphNode(String pId) {
-        super(pId);
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     @Override
     public TypeEnum getType() {
         return TypeEnum.START_NODE;

@@ -7,27 +7,76 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import com.pantar.widget.graph.shared.model.TypeEnum;
+
 /**
  * @author mauro.monti
  * 
  */
 public abstract class AbstractNode implements Node {
 
-    private String id;
-    private TypeEnum type = TypeEnum.NODE;
+    /**
+     * 
+     */
+    protected String id;
+    
+    /**
+     * 
+     */
+    protected TypeEnum type = TypeEnum.NODE;
 
-    private String label;
+    /**
+     * 
+     */
+    protected String label;
 
-    private Double x;
-    private Double y;
+    /**
+     * 
+     */
+    protected Double x;
+    
+    /**
+     * 
+     */
+    protected Double y;
 
-    private Boolean selected;
+    /**
+     * 
+     */
+    protected Boolean selected;
+    
+    /**
+     * 
+     */
+    protected Boolean enabled;
 
-    private Set<Relation> outgoing = new HashSet<Relation>();
-    private Set<Relation> incoming = new HashSet<Relation>();
+    /**
+     * 
+     */
+    protected Set<Relation> outgoing = new HashSet<Relation>();
+    
+    /**
+     * 
+     */
+    protected Set<Relation> incoming = new HashSet<Relation>();
 
+    /**
+     * 
+     */
+    protected NodeStyle nodeStyle;
+    
+    /**
+     * 
+     */
+    protected GraphModel graphModel;
+    
+    /**
+     * 
+     */
     public AbstractNode() {
         this.id = UUID.randomUUID().toString();
+        this.enabled = Boolean.TRUE;
+        this.selected = Boolean.FALSE;
     }
 
     /**
@@ -40,144 +89,84 @@ public abstract class AbstractNode implements Node {
         }
     }
 
-    /**
-     * @return the id
-     */
-    public String getId() {
-        return id;
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public String getId() {
+		return this.id;
+	}
 
-    /**
-     * @param id
-     *            the id to set
-     */
-    void setId(String id) {
-        this.id = id;
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public TypeEnum getType() {
+		return this.type;
+	}
 
-    /**
-     * @return the type
-     */
-    public TypeEnum getType() {
-        return type;
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public Double getX() {
+		return this.x;
+	}
 
-    /**
-     * @param type
-     *            the type to set
-     */
-    void setType(TypeEnum type) {
-        this.type = type;
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public Double getY() {
+		return this.y;
+	}
 
-    /**
-     * @return the label
-     */
-    public String getLabel() {
-        return label;
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public Boolean hasLabel() {
+		return (this.label != null && !this.label.isEmpty());
+	}
 
-    /**
-     * @param label
-     *            the label to set
-     */
-    public void setLabel(String label) {
-        this.label = label;
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public String getLabel() {
+		return this.label;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.pantar.widget.graph.server.Node#hasLabel()
-     */
-    @Override
-    public Boolean hasLabel() {
-        return (this.label != null && this.label.length() > 0);
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public Boolean isSelected() {
+		return this.selected;
+	}
 
-    /**
-     * @return the x
-     */
-    public Double getX() {
-        return x;
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public Boolean isEnabled() {
+		return this.enabled;
+	}
 
-    /**
-     * @param x
-     *            the x to set
-     */
-    void setX(Double x) {
-        this.x = x;
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public NodeStyle getStyle() {
+		return this.nodeStyle;
+	}
 
-    /**
-     * @return the y
-     */
-    public Double getY() {
-        return y;
-    }
-
-    /**
-     * @param y
-     *            the y to set
-     */
-    void setY(Double y) {
-        this.y = y;
-    }
-
-    /**
-     * @return the selected
-     */
-    Boolean getSelected() {
-        return selected;
-    }
-
-    /**
-     * @param selected
-     *            the selected to set
-     */
-    public void setSelected(Boolean selected) {
-        this.selected = selected;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.pantar.widget.graph.server.Node#isSelected()
-     */
-    @Override
-    public Boolean isSelected() {
-        return this.getSelected();
-    }
-
-    /**
-     * @return the outgoing
-     */
-    Set<Relation> getOutgoing() {
-        return outgoing;
-    }
-
-    /**
-     * @param outgoing
-     *            the outgoing to set
-     */
-    void setOutgoing(Set<Relation> outgoing) {
-        this.outgoing = outgoing;
-    }
-
-    /**
-     * @return the incoming
-     */
-    Set<Relation> getIncoming() {
-        return incoming;
-    }
-
-    /**
-     * @param incoming
-     *            the incoming to set
-     */
-    void setIncoming(Set<Relation> incoming) {
-        this.incoming = incoming;
-    }
-
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void setStyle(NodeStyle pNodeStyle) {
+		this.nodeStyle = pNodeStyle;
+	}
+    
 }
