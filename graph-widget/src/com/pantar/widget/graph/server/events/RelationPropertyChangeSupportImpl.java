@@ -27,7 +27,7 @@ public class RelationPropertyChangeSupportImpl extends DefaultPropertyChangeSupp
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void firePropertyChange(GraphModelEventType pEventType, Node pOldNode, Node pNewNode) {
+	public void firePropertyChange(EventType pEventType, Node pOldNode, Node pNewNode) {
 		super.firePropertyChange(pEventType.getType(), pOldNode, pNewNode);
 	}
 }

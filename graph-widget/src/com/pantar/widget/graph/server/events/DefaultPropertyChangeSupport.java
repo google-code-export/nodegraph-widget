@@ -28,7 +28,7 @@ public class DefaultPropertyChangeSupport extends PropertyChangeSupport implemen
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void firePropertyChange(GraphModelEventType pEventType, Boolean pOldValue, Boolean pNewValue) {
+	public void firePropertyChange(EventType pEventType, Boolean pOldValue, Boolean pNewValue) {
 		super.firePropertyChange(pEventType.getType(), pOldValue, pNewValue);
 	}
 	
@@ -36,7 +36,7 @@ public class DefaultPropertyChangeSupport extends PropertyChangeSupport implemen
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void firePropertyChange(GraphModelEventType pEventType, Double pOldValue, Double pNewValue) {
+	public void firePropertyChange(EventType pEventType, Double pOldValue, Double pNewValue) {
 		super.firePropertyChange(pEventType.getType(), pOldValue, pNewValue);
 	}
 	
@@ -44,7 +44,7 @@ public class DefaultPropertyChangeSupport extends PropertyChangeSupport implemen
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void firePropertyChange(GraphModelEventType pEventType, String pOldValue, String pNewValue) {
+	public void firePropertyChange(EventType pEventType, String pOldValue, String pNewValue) {
 		super.firePropertyChange(pEventType.getType(), pOldValue, pNewValue);
 	}
 	
@@ -52,7 +52,7 @@ public class DefaultPropertyChangeSupport extends PropertyChangeSupport implemen
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void firePropertyChange(GraphModelEventType pEventType, Double[] pOldValue, Double[] pNewValue) {
+	public void firePropertyChange(EventType pEventType, Double[] pOldValue, Double[] pNewValue) {
 		super.firePropertyChange(pEventType.getType(), pOldValue, pNewValue);	
 	}
 	

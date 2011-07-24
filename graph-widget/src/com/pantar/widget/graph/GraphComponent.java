@@ -57,8 +57,7 @@ public class GraphComponent extends AbstractComponent {
 		if (!this.graphModelInitialized) {
 			String jsonGraphModel = jsonSerializer.exclude("*.class").deepSerialize(this.graphModel);
 			target.addAttribute(GraphConstants.MODEL.GRAPHMODEL_NAME, jsonGraphModel);
-			
-			this.graphModelInitialized = Boolean.TRUE;
+
 		} else {
 			// = Update the Graph Model.
 			
@@ -71,8 +70,11 @@ public class GraphComponent extends AbstractComponent {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public void changeVariables(final Object source, final Map<String, Object> variables) {
 		super.changeVariables(source, variables);
+
+		
 		
 		Map<String, Object> changes = (Map<String, Object>) variables.get(GraphConstants.MODEL.ATTRIBUTES_NAME);
 		String id = (String) changes.get(GraphConstants.MODEL.ATTR_ID);

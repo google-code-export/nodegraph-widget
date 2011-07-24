@@ -7,7 +7,7 @@ package com.pantar.widget.graph.server.events;
  * @author mauro.monti
  *
  */
-public enum NodeEventType implements GraphModelEventType {
+public enum NodeEventType implements EventType {
 
 	POSITION, LABEL, SELECTED, UNSELECTED, ENABLED, DISABLED;
 

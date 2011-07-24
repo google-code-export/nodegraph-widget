@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.pantar.widget.graph.server.events.GraphModelEventType;
+import com.pantar.widget.graph.server.events.EventType;
 import com.pantar.widget.graph.server.events.PropertyChangeCallback;
 import com.pantar.widget.graph.server.layout.GraphModelLayout;
 import com.pantar.widget.graph.shared.model.RelationTypeEnum;
@@ -182,7 +182,7 @@ public class GraphModelImpl implements GraphModel, PropertyChangeListener {
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void registerCallback(GraphModelEventType eventType, PropertyChangeCallback pCallback) {
+	public void registerCallback(EventType eventType, PropertyChangeCallback pCallback) {
 		String type = eventType.getType();
 		
 		Set<PropertyChangeCallback> storedCallbacks = this.registeredCallbacks.get(type);
