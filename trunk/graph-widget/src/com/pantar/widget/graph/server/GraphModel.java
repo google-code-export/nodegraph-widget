@@ -5,7 +5,7 @@ package com.pantar.widget.graph.server;
 
 import java.util.Set;
 
-import com.pantar.widget.graph.server.events.GraphModelEventType;
+import com.pantar.widget.graph.server.events.EventType;
 import com.pantar.widget.graph.server.events.PropertyChangeCallback;
 import com.pantar.widget.graph.server.layout.GraphModelLayout;
 import com.pantar.widget.graph.shared.model.RelationTypeEnum;
@@ -95,7 +95,7 @@ public interface GraphModel {
     /**
      * @param callback
      */
-    void registerCallback(GraphModelEventType pEventType, PropertyChangeCallback pCallback);
+    void registerCallback(EventType pEventType, PropertyChangeCallback pCallback);
     
     /**
      * @param pLayout
