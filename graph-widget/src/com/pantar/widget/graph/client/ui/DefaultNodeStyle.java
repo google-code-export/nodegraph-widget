@@ -14,21 +14,33 @@ public class DefaultNodeStyle implements NodeStyle {
 	/**
 	 * 
 	 */
-	private final String styleClassName;
+	private String styleClassName;
 
 	/**
 	 * 
 	 */
-	private final String selectedStyleClassName;
+	private String selectedStyleClassName;
 
+	/**
+	 * 
+	 */
+	private String enabledStyleClassName;
+	
+	/**
+	 * 
+	 */
+	private String disabledStyleClassName;
+	
 	/**
 	 * 
 	 */
 	public DefaultNodeStyle() {
-		this.styleClassName = GraphConstants.NODE_NAME;
-		this.selectedStyleClassName = GraphConstants.NODE_CSS_SELECTED_CLASSNAME;
+		this.styleClassName = GraphConstants.DOM.NODE_CSS_TYPE_CLASSNAME;
+		this.selectedStyleClassName = GraphConstants.DOM.NODE_CSS_SELECTED_CLASSNAME;
+		this.enabledStyleClassName = GraphConstants.DOM.NODE_CSS_ENABLED_CLASSNAME;
+		this.disabledStyleClassName = GraphConstants.DOM.NODE_CSS_DISABLED_CLASSNAME;
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -45,4 +57,19 @@ public class DefaultNodeStyle implements NodeStyle {
 		return this.selectedStyleClassName;
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public String getEnabledClassName() {
+		return this.enabledStyleClassName;
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public String getDisabledClassName() {
+		return this.disabledStyleClassName;
+	}
 }

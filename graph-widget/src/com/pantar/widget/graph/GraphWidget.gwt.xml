@@ -23,10 +23,6 @@
     
     <!-- Inherit the core Web Toolkit stuff. -->
     <inherits name='com.google.gwt.user.User' />
-
-    <!-- Inherit Graphics. 
-    <inherits name='org.vaadin.gwtgraphics.GWTGraphics' />
-    -->
     
     <!-- Inherit gwt-dnd support -->
     <inherits name='com.allen_sauer.gwt.dnd.gwt-dnd' />

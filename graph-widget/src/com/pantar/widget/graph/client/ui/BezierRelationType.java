@@ -16,7 +16,7 @@ import com.google.gwt.touch.client.Point;
  * @author mauro.monti
  * 
  */
-public class BezierRelationType extends AbstractRelationType implements RelationType {
+public class BezierRelationType extends AbstractRelationType {
 
 	/**
 	 * 
@@ -28,15 +28,11 @@ public class BezierRelationType extends AbstractRelationType implements Relation
 	 */
 	public BezierRelationType() {
 		this.omsvgPathElement = OMSVGParser.currentDocument().createSVGPathElement();
-		// this.omsvgPathElement.setId(this.id);
-		 this.omsvgPathElement.setAttribute(SVGConstants.CSS_STROKE_WIDTH_PROPERTY,
-		 "2");
-		 this.omsvgPathElement.setAttribute(SVGConstants.CSS_STROKE_VALUE,
-		 "black");
-		 this.omsvgPathElement.setAttribute(SVGConstants.CSS_FILL_OPACITY_PROPERTY,
-		 "0");
-		 this.omsvgPathElement.setAttribute(SVGConstants.CSS_STROKE_DASHARRAY_PROPERTY,
-		 "5,5");
+//		this.omsvgPathElement.setAttribute(SVGConstants.CSS_STROKE_WIDTH_PROPERTY, "2");
+//		this.omsvgPathElement.setAttribute(SVGConstants.CSS_STROKE_VALUE, "black");
+//		this.omsvgPathElement.setAttribute(SVGConstants.CSS_STROKE_DASHARRAY_PROPERTY, "5,5");
+		this.omsvgPathElement.setAttribute(SVGConstants.CSS_FILL_OPACITY_PROPERTY, "0");
+
 		final OMSVGPathSegMovetoAbs moveAbs = this.omsvgPathElement.createSVGPathSegMovetoAbs(0, 0);
 		final OMSVGPathSegCurvetoCubicAbs curve = this.omsvgPathElement.createSVGPathSegCurvetoCubicAbs(0, 0, 0, 0, 0, 0);
 
@@ -44,6 +40,24 @@ public class BezierRelationType extends AbstractRelationType implements Relation
 		this.omsvgPathElement.getPathSegList().appendItem(curve);
 	}
 
+	/**
+	 * @param pRelationStyle
+	 */
+	public BezierRelationType(RelationStyle pRelationStyle) {
+		this();
+
+		// = Apply SVG Style Attributes.
+		super.applyAttributes(omsvgPathElement, pRelationStyle);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void applyAttributes(RelationStyle pRelationStyle) {
+		super.applyAttributes(omsvgPathElement, pRelationStyle);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -55,8 +69,10 @@ public class BezierRelationType extends AbstractRelationType implements Relation
 		final float ex = Double.valueOf(pToPoint.getX()).floatValue();
 		final float ey = Double.valueOf(pToPoint.getY()).floatValue();
 
-		final OMSVGPathSegMovetoAbs move = this.omsvgPathElement.getPathSegList().getItem(0).cast();
-		final OMSVGPathSegCurvetoCubicAbs curve = this.omsvgPathElement.getPathSegList().getItem(1).cast();
+		final OMSVGPathSegMovetoAbs move = this.omsvgPathElement
+				.getPathSegList().getItem(0).cast();
+		final OMSVGPathSegCurvetoCubicAbs curve = this.omsvgPathElement
+				.getPathSegList().getItem(1).cast();
 
 		move.setX(sx);
 		move.setY(sy);

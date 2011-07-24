@@ -4,7 +4,10 @@
 package com.pantar.widget.graph.server;
 
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+
+import com.pantar.widget.graph.server.events.NodeEventType;
+import com.pantar.widget.graph.server.events.NodePropertyChangeSupport;
+import com.pantar.widget.graph.server.events.NodePropertyChangeSupportImpl;
 
 /**
  * @author mauro.monti
@@ -15,7 +18,7 @@ public class DefaultNode extends AbstractNode {
     /**
      * 
      */
-    private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+    private NodePropertyChangeSupport propertyChangeSupport = new NodePropertyChangeSupportImpl(this);
 
     /**
      * 
@@ -31,46 +34,109 @@ public class DefaultNode extends AbstractNode {
         super(pId);
     }
 
-    @Override
-    public void setLabel(String label) {
-        String oldLabel = this.getLabel();
-        if (oldLabel != null && oldLabel.equals(label)) {
-            return;
-        }
-        super.setLabel(label);
-        this.propertyChangeSupport.firePropertyChange("label", oldLabel, this.getLabel());
-    }
-
-    @Override
-    public void setPosition(Double pPosX, Double pPosY) {
-        Double oldX = this.getX();
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void setPosition(Double pPosX, Double pPosY) {
+		Double oldX = this.getX();
         Double oldY = this.getY();
 
         if ((oldX != null && oldX.equals(pPosX)) && (oldX != null && oldY.equals(pPosY))) {
             return;
         }
 
-        this.setX(pPosX);
-        this.setY(pPosY);
+        this.x = pPosX;
+        this.y = pPosY;
 
         Double[] oldPoints = { oldX, oldY };
         Double[] newPoints = { this.getX(), this.getY() };
 
-        this.propertyChangeSupport.firePropertyChange("position", oldPoints, newPoints);
-    }
+        this.propertyChangeSupport.firePropertyChange(NodeEventType.POSITION, oldPoints, newPoints);
+	}
 
-    @Override
-    public void setSelected(Boolean selected) {
-        Boolean oldSelected = this.getSelected();
-        if (oldSelected != null && oldSelected.equals(selected)) {
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void setLabel(String pLabel) {
+		final String currentLabel = this.getLabel();
+        if (currentLabel != null && currentLabel.equals(label)) {
             return;
         }
-        super.setSelected(selected);
-        this.propertyChangeSupport.firePropertyChange("selected", oldSelected, selected);
-    }
+        
+        this.label = pLabel;
+        this.propertyChangeSupport.firePropertyChange(NodeEventType.LABEL, currentLabel, this.getLabel());	
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void enable() {
+		final Boolean currentState = this.isEnabled();
+		this.enabled = Boolean.TRUE;
+		
+		if (currentState.equals(this.isEnabled())) {
+			return;
+		}
+		
+		this.propertyChangeSupport.firePropertyChange(NodeEventType.ENABLED, currentState, this.isEnabled());
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void disable() {
+		final Boolean currentState = this.isEnabled();
+		this.enabled = Boolean.FALSE;
+		
+		if (currentState.equals(this.isEnabled())) {
+			return;
+		}
+		
+		this.propertyChangeSupport.firePropertyChange(NodeEventType.DISABLED, currentState, this.isEnabled());
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void select() {
+		final Boolean currentState = this.isSelected();
+		
+		this.graphModel.reset();
+		this.selected = Boolean.TRUE;
+		
+		if (currentState.equals(this.isSelected())) {
+			return;
+		}
+		
+		this.propertyChangeSupport.firePropertyChange(NodeEventType.SELECTED, currentState, this.isSelected());
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void unselect() {
+		final Boolean currentState = this.isSelected();
+		this.selected = Boolean.FALSE;
+		
+		if (currentState.equals(this.isSelected())) {
+			return;
+		}
+		
+		this.propertyChangeSupport.firePropertyChange(NodeEventType.UNSELECTED, currentState, this.isSelected());
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void addPropertyChangeListener(PropertyChangeListener pPropertyChangeListener) {
+		this.propertyChangeSupport.addPropertyChangeListener(pPropertyChangeListener);
+	}
 
-    @Override
-    public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
-        this.propertyChangeSupport.addPropertyChangeListener(propertyChangeListener);
-    }
 }

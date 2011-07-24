@@ -3,12 +3,19 @@
  */
 package com.pantar.widget.graph.client.ui;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -20,6 +27,8 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.UIObject;
+import com.pantar.widget.graph.shared.GraphConstants;
+import com.pantar.widget.graph.shared.model.TypeEnum;
 
 /**
  * @author mauro.monti
@@ -40,12 +49,22 @@ public class Node {
 	/**
 	 * 
 	 */
+	protected HTML label;
+	
+	/**
+	 * 
+	 */
 	protected boolean dragging;
 
 	/**
 	 * 
 	 */
 	protected boolean selected;
+
+	/**
+	 * 
+	 */
+	protected boolean enabled;
 
 	/**
 	 * 
@@ -75,7 +94,7 @@ public class Node {
 	/**
 	 * 
 	 */
-	protected NodeTypeEnum nodeTypeEnum;
+	protected TypeEnum nodeTypeEnum;
 
 	/**
 	 * 
@@ -88,11 +107,16 @@ public class Node {
 	protected VGraphComponent parent;
 
 	/**
+	 * 
+	 */
+	protected Map<String, Object> nodeAttributes = new HashMap<String, Object>();
+
+	/**
 	 * @param pParent
 	 * @param pId
 	 * @param pNodeTypeEnum
 	 */
-	public Node(final VGraphComponent pParent, final String pId, final NodeTypeEnum pNodeTypeEnum) {
+	public Node(final VGraphComponent pParent, final String pId, final TypeEnum pNodeTypeEnum) {
 		this(pParent, pId, pNodeTypeEnum, new DefaultNodeStyle(), 0, 0);
 	}
 
@@ -104,7 +128,7 @@ public class Node {
 	 * @param pX
 	 * @param pY
 	 */
-	public Node(final VGraphComponent pParent, final String pId, final NodeTypeEnum pNodeTypeEnum, final NodeStyle pNodeStyle, final double pX, final double pY) {
+	public Node(final VGraphComponent pParent, final String pId, final TypeEnum pNodeTypeEnum, final NodeStyle pNodeStyle, final double pX, final double pY) {
 		if (pParent == null) {
 			throw new IllegalArgumentException("VGraphComponent cannot be null.");
 		}
@@ -119,7 +143,9 @@ public class Node {
 		this.id = pId;
 		this.nodeTypeEnum = pNodeTypeEnum;
 		this.nodeStyle = pNodeStyle;
-
+		this.enabled = true;
+		this.selected = false;
+		
 		this.initializeNode(pX, pY);
 	}
 
@@ -127,16 +153,15 @@ public class Node {
 	 * 
 	 */
 	private void initializeNode(final double pX, final double pY) {
-		if (this.nodeStyle == null) {
-			this.nodeStyle = new DefaultNodeStyle();
-		}
-
 		this.widget = new HTML();
 		this.widget.getElement().setId(this.id);
 
 		this.widget.setStyleName(this.nodeStyle.getStyleClassName());
-		this.widget.addStyleName(this.nodeStyle.getSelectedClassName());
-
+		if (!this.nodeTypeEnum.equals(TypeEnum.NODE)) {
+			this.widget.addStyleName(this.nodeTypeEnum.getTypeName());	
+		}
+		
+		this.widget.getElement().getStyle().setCursor(Cursor.POINTER);
 		this.widget.getElement().getStyle().setPosition(Position.ABSOLUTE);
 		this.widget.getElement().getStyle().setLeft(pX, Unit.PX);
 		this.widget.getElement().getStyle().setTop(pY, Unit.PX);
@@ -155,9 +180,40 @@ public class Node {
 	}
 
 	/**
+	 * @return
+	 */
+	private Map<String, Object> getAttributes() {
+		nodeAttributes.put(GraphConstants.MODEL.ATTR_ID, Node.this.widget.getElement().getId());
+		nodeAttributes.put(GraphConstants.MODEL.ATTR_X, Node.this.getCenterX());
+		nodeAttributes.put(GraphConstants.MODEL.ATTR_Y, Node.this.getCenterY());
+		nodeAttributes.put(GraphConstants.MODEL.ATTR_SELECTED, Node.this.selected);
+		nodeAttributes.put(GraphConstants.MODEL.ATTR_SELECTED, Node.this.enabled);
+		
+		return nodeAttributes;
+	}
+	
+	/**
 	 * 
 	 */
 	private void addHandlers() {
+		if (this.parent.singleSelectionSupport.booleanValue()) {
+			this.widget.addDomHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					Node.this.setSelected(Boolean.TRUE);
+					Node.this.parent.client.updateVariable(Node.this.parent.paintableId, GraphConstants.MODEL.ATTRIBUTES_NAME, getAttributes(), true);
+				}
+			}, ClickEvent.getType());
+		}
+
+		this.widget.addDomHandler(new DoubleClickHandler() {
+			@Override
+			public void onDoubleClick(DoubleClickEvent event) {
+				Node.this.setSelected((!Node.this.selected));
+				Node.this.parent.client.updateVariable(Node.this.parent.paintableId, GraphConstants.MODEL.ATTRIBUTES_NAME, getAttributes(), true);
+			}
+		}, DoubleClickEvent.getType());
+
 		this.widget.addDomHandler(new MouseDownHandler() {
 
 			/**
@@ -165,8 +221,12 @@ public class Node {
 			 */
 			@Override
 			public void onMouseDown(final MouseDownEvent event) {
+				if (!Node.this.selected) {
+					return;
+				}
+				
 				Node.this.mouseDown = true;
-
+				
 				DOM.setCapture(Node.this.widget.getElement());
 				Node.this.dragStartX = event.getX();
 				Node.this.dragStartY = event.getY();
@@ -210,37 +270,35 @@ public class Node {
 			 */
 			@Override
 			public void onMouseUp(final MouseUpEvent event) {
-				if (!Node.this.dragging && !Node.this.selected) {
-					Node.this.setSelected(Boolean.TRUE);
-				} else if (!Node.this.dragging && Node.this.selected) {
-					Node.this.setSelected(Boolean.FALSE);
-				}
-
 				Node.this.dragging = false;
 				Node.this.mouseDown = false;
 				DOM.releaseCapture(Node.this.widget.getElement());
 
-				// final Map<String, Object> nodeAttributes = new
-				// HashMap<String, Object>();
-				// nodeAttributes.put(NodeConstants.NODE_ATTR_ID,
-				// Node.this.widget.getElement().getId());
-				// nodeAttributes.put(NodeConstants.NODE_ATTR_X,
-				// Node.this.getCenterX());
-				// nodeAttributes.put(NodeConstants.NODE_ATTR_Y,
-				// Node.this.getCenterY());
-				// nodeAttributes.put(NodeConstants.NODE_ATTR_SELECTED,
-				// Node.this.selected);
-				//
-				// final String paintableId = Node.this.parent.paintableId;
-				// Node.this.parent.client.updateVariable(paintableId,
-				// NodeConstants.NODE_ATTRIBUTES, nodeAttributes, true);
-
+				if (!Node.this.dragging) {
+					return;
+				}
+				
+				Node.this.parent.client.updateVariable(Node.this.parent.paintableId, GraphConstants.MODEL.ATTRIBUTES_NAME, getAttributes(), true);
 				event.preventDefault();
 			}
 
 		}, MouseUpEvent.getType());
 	}
 
+	/**
+	 * @param pLabel
+	 */
+	public void setLabel(String pLabel) {
+		this.label = new HTML(pLabel);
+		if (this.widget.getElement().hasChildNodes()) {
+			this.widget.getElement().getFirstChildElement().setInnerText(pLabel);
+		} else {
+			this.widget.getElement().appendChild(this.label.getElement());
+		}
+		this.label.setStyleName(GraphConstants.DOM.NODE_CSS_LABEL_CLASSNAME);
+		this.label.getElement().getStyle().setPosition(Position.RELATIVE);
+	}
+	
 	/**
 	 * @param pRelation
 	 */
@@ -260,17 +318,37 @@ public class Node {
 	 *            the selected to set
 	 */
 	public void setSelected(final boolean pSelected) {
-		if (this.selected == pSelected) {
+		if (!this.enabled) {
 			return;
 		}
-
+		
+		for (Node node : this.parent.getNodes()) {
+			node.selected = Boolean.FALSE;
+			node.widget.getElement().removeClassName(Node.this.nodeStyle.getSelectedClassName());
+			node.widget.getElement().addClassName(Node.this.nodeStyle.getEnabledClassName());
+		}
+		
 		this.selected = pSelected;
-
+		
 		if (this.selected) {
+			Node.this.widget.getElement().removeClassName(Node.this.nodeStyle.getEnabledClassName());
 			Node.this.widget.getElement().addClassName(Node.this.nodeStyle.getSelectedClassName());
 		} else {
+			Node.this.widget.getElement().addClassName(Node.this.nodeStyle.getEnabledClassName());
 			Node.this.widget.getElement().removeClassName(Node.this.nodeStyle.getSelectedClassName());
 		}
+	}
+
+	/**
+	 * @param pEnabled
+	 */
+	public void setEnabled(final boolean pEnabled) {
+		String cssClassName = (pEnabled) ? Node.this.nodeStyle.getEnabledClassName() : Node.this.nodeStyle.getDisabledClassName(); 
+		Node.this.widget.getElement().removeClassName(Node.this.nodeStyle.getEnabledClassName());
+		Node.this.widget.getElement().removeClassName(Node.this.nodeStyle.getDisabledClassName());
+		
+		this.enabled = pEnabled;
+		Node.this.widget.getElement().addClassName(cssClassName);
 	}
 
 	/**

@@ -14,7 +14,7 @@ import com.google.gwt.touch.client.Point;
  * @author mauro.monti
  * 
  */
-public class LineRelationType implements RelationType {
+public class LineRelationType extends AbstractRelationType {
 
 	/**
 	 * 
@@ -26,13 +26,28 @@ public class LineRelationType implements RelationType {
 	 */
 	public LineRelationType() {
 		this.omsvgLineElement = OMSVGParser.currentDocument().createSVGLineElement(0, 0, 0, 0);
-		// this.omsvgLineElement.setId(this.id);
-		 this.omsvgLineElement.setAttribute(SVGConstants.CSS_STROKE_WIDTH_PROPERTY,
-		 "2");
-		 this.omsvgLineElement.setAttribute(SVGConstants.CSS_STROKE_VALUE,
-		 "black");
+//		this.omsvgLineElement.setAttribute(SVGConstants.CSS_STROKE_WIDTH_PROPERTY, "2");
+//		this.omsvgLineElement.setAttribute(SVGConstants.CSS_STROKE_VALUE, "black");
+	}
+	
+	/**
+	 * @param pRelationStyle
+	 */
+	public LineRelationType(RelationStyle pRelationStyle) {
+		this();
+		
+		// = Apply SVG Style Attributes.
+		super.applyAttributes(omsvgLineElement, pRelationStyle);
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void applyAttributes(RelationStyle pRelationStyle) {
+		super.applyAttributes(omsvgLineElement, pRelationStyle);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

@@ -3,6 +3,7 @@
  */
 package com.pantar.widget.graph.server;
 
+
 /**
  * @author mauro.monti
  * 
@@ -10,28 +11,13 @@ package com.pantar.widget.graph.server;
 public interface RelationStyle {
 
 	/**
-	 * @return
+	 * 
 	 */
-	String getStrokeColor();
-
-	/**
-	 * @return
-	 */
-	int getStrokeWidth();
-
-	/**
-	 * @return
-	 */
-	Boolean isDashedStroke();
-
-	/**
-	 * @param pDashedStroke
-	 */
-	void setDashedStroke(Boolean pDashedStroke);
+	void setContinuousLine();
 
 	/**
 	 * @param pLine
 	 * @param pSpace
 	 */
-	void setDashedStrokePattern(int pLine, int pSpace);
+	void setDashedStroke(Integer pLine, Integer pSpace);
 }

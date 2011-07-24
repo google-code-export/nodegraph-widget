@@ -5,28 +5,61 @@ package com.pantar.widget.graph.server;
 
 import java.util.UUID;
 
+import com.pantar.widget.graph.shared.model.RelationTypeEnum;
+import com.pantar.widget.graph.shared.model.TypeEnum;
+
 /**
  * @author mauro.monti
  * 
  */
 public abstract class AbstractRelation implements Relation {
 
-	private String id;
-	private TypeEnum type = TypeEnum.RELATION;
+	/**
+	 * 
+	 */
+	protected String id;
 
-	private Node from;
+	/**
+	 * 
+	 */
+	protected TypeEnum type = TypeEnum.RELATION;
+
+	/**
+	 * 
+	 */
+	protected Node from;
+
+	/**
+	 * 
+	 */
 	protected String fromRef;
 
-	private Node to;
+	/**
+	 * 
+	 */
+	protected Node to;
+
+	/**
+	 * 
+	 */
 	protected String toRef;
 
+	/**
+	 * 
+	 */
 	protected RelationStyle relationStyle;
+
+	/**
+	 * 
+	 */
+	protected RelationTypeEnum relationType;
 
 	/**
 	 * 
 	 */
 	public AbstractRelation() {
 		this.id = UUID.randomUUID().toString();
+		this.relationType = RelationTypeEnum.LINE;
 		this.relationStyle = new DefaultRelationStyle();
 	}
 
@@ -41,7 +74,7 @@ public abstract class AbstractRelation implements Relation {
 	}
 
 	/**
-	 * @return the id
+	 * {@inheritdoc}
 	 */
 	@Override
 	public String getId() {
@@ -49,15 +82,7 @@ public abstract class AbstractRelation implements Relation {
 	}
 
 	/**
-	 * @param id
-	 *            the id to set
-	 */
-	void setId(final String id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the type
+	 * {@inheritdoc}
 	 */
 	@Override
 	public TypeEnum getType() {
@@ -65,81 +90,66 @@ public abstract class AbstractRelation implements Relation {
 	}
 
 	/**
-	 * @param type
-	 *            the type to set
+	 * {@inheritdoc}
 	 */
-	void setType(final TypeEnum type) {
-		this.type = type;
-	}
-
-	/**
-	 * @return the from
-	 */
-	Node getFrom() {
+	@Override
+	public Node getNodeFrom() {
 		return this.from;
 	}
 
 	/**
-	 * @param from
-	 *            the from to set
+	 * {@inheritdoc}
 	 */
-	void setFrom(final Node from) {
-		this.from = from;
-	}
-
-	/**
-	 * @return the fromRef
-	 */
-	String getFromRef() {
+	@Override
+	public String getFromRef() {
 		return this.fromRef;
 	}
-
+	
 	/**
-	 * @param fromRef
-	 *            the fromRef to set
+	 * {@inheritdoc}
 	 */
-	void setFromRef(final String fromRef) {
-		this.fromRef = fromRef;
-	}
-
-	/**
-	 * @return the to
-	 */
-	Node getTo() {
+	@Override
+	public Node getNodeTo() {
 		return this.to;
 	}
 
 	/**
-	 * @param to
-	 *            the to to set
+	 * {@inheritdoc}
 	 */
-	void setTo(final Node to) {
-		this.to = to;
-	}
-
-	/**
-	 * @return the toRef
-	 */
-	String getToRef() {
+	@Override
+	public String getToRef() {
 		return this.toRef;
 	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public RelationStyle getStyle() {
+		return this.relationStyle;
+	}
 
 	/**
-	 * @param toRef
-	 *            the toRef to set
+	 * {@inheritdoc}
 	 */
-	void setToRef(final String toRef) {
-		this.toRef = toRef;
-	}
-
 	@Override
-	public Node getNodeFrom() {
-		return this.getFrom();
+	public void setStyle(RelationStyle pRelationStyle) {
+		this.relationStyle = pRelationStyle;
 	}
-
+	
+	/**
+	 * {@inheritdoc}
+	 */
 	@Override
-	public Node getNodeTo() {
-		return this.getTo();
+	public RelationTypeEnum getRelationType() {
+		return this.relationType;
 	}
-
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void setRelationType(RelationTypeEnum pRelationTypeEnum) {
+		this.relationType = pRelationTypeEnum;
+	}
 }

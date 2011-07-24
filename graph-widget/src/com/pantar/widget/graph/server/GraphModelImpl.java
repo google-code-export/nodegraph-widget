@@ -5,8 +5,15 @@ package com.pantar.widget.graph.server;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+
+import com.pantar.widget.graph.server.events.GraphModelEventType;
+import com.pantar.widget.graph.server.events.PropertyChangeCallback;
+import com.pantar.widget.graph.server.layout.GraphModelLayout;
+import com.pantar.widget.graph.shared.model.RelationTypeEnum;
 
 /**
  * @author mauro.monti
@@ -14,84 +21,198 @@ import java.util.Set;
  */
 public class GraphModelImpl implements GraphModel, PropertyChangeListener {
 
-    private final Set<PropertyChangeCallback> callbacks = new HashSet<PropertyChangeCallback>();
+    /**
+     * 
+     */
+    private final Map<String, Set<PropertyChangeCallback>> registeredCallbacks = new HashMap<String, Set<PropertyChangeCallback>>();
+    
+    /**
+     * 
+     */
     private final Set<Node> nodes = new HashSet<Node>();
+    
+    /**
+     * 
+     */
     private final Set<Relation> relations = new HashSet<Relation>();
 
     /**
-     * @param pNode
+     * 
      */
-    public void addNode(final Node pNode) {
-        pNode.addPropertyChangeListener(this);
-        this.nodes.add(pNode);
-    }
+    private boolean singleSelectionSupport = Boolean.FALSE;
+    
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void addNode(Node pNode) {
+		pNode.addPropertyChangeListener(this);
+		((AbstractNode) pNode).graphModel = this;
+		
+		this.nodes.add(pNode);
+	}
 
-    /**
-     * @param pRelationship
-     */
-    public void addRelation(final Relation pRelationship) {
-        pRelationship.addPropertyChangeListener(this);
-        this.relations.add(pRelationship);
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void addRelation(Relation pRelation) {
+		pRelation.addPropertyChangeListener(this);
+		this.relations.add(pRelation);
+	}
 
-    /**
-     * @param pFrom
-     * @param pTo
-     */
-    public void connect(final Node pFrom, final Node pTo) {
-        if (!this.nodes.contains(pFrom)) {
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void connect(Node pFrom, Node pTo) {
+		connect(pFrom, pTo, new DefaultRelation());
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void connect(Node pFrom, Node pTo, Relation pRelation) {
+		if (!this.nodes.contains(pFrom)) {
             this.addNode(pFrom);
         }
-        if (!this.nodes.contains(pTo)) {
+        
+		if (!this.nodes.contains(pTo)) {
             this.addNode(pTo);
         }
 
-        final Relation defaultRelation = new DefaultRelation();
-        defaultRelation.setNodeFrom(pFrom);
-        defaultRelation.setNodeTo(pTo);
+		pRelation.setNodeFrom(pFrom);
+		pRelation.setNodeTo(pTo);
 
-        this.addRelation(defaultRelation);
-    }
+        this.addRelation(pRelation);		
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void connect(Node pFrom, Node pTo, RelationStyle pRelationStyle) {
+		final Relation defaultRelation = new DefaultRelation();
+		defaultRelation.setStyle(pRelationStyle);
+		
+		connect(pFrom, pTo, defaultRelation);
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void connect(Node pFrom, Node pTo, RelationTypeEnum pRelationTypeEnum) {
+		final Relation defaultRelation = new DefaultRelation();
+		defaultRelation.setRelationType(pRelationTypeEnum);
+		
+		connect(pFrom, pTo, defaultRelation);
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void connect(Node pFrom, Node pTo, RelationTypeEnum pRelationTypeEnum, RelationStyle pRelationStyle) {
+		final Relation defaultRelation = new DefaultRelation();
+		defaultRelation.setStyle(pRelationStyle);
+		defaultRelation.setRelationType(pRelationTypeEnum);
+		
+		connect(pFrom, pTo, defaultRelation);
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public Node getNodeById(String pId) {
+		for (Node currentNode : this.nodes) {
+			if (currentNode.getId().equals(pId))  {
+				return currentNode;
+			}
+		}
+		return null;
+	}
 
-    /**
-     * @return the nodes
-     */
-    public Set<Node> getNodes() {
-        return this.nodes;
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public Set<Node> getNodes() {
+		return this.nodes;
+	}
 
-    /**
-     * @return the relations
-     */
-    public Set<Relation> getRelations() {
-        return this.relations;
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public Set<Relation> getRelations() {
+		return this.relations;
+	}
 
-    /**
-     * @param pId
-     * @return
-     */
-    public Node getNodeById(final String pId) {
-        for (final Node currentNode : this.nodes) {
-            if (currentNode.getId().equals(pId)) {
-                return currentNode;
-            }
-        }
-        return null;
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void reset() {
+		for (Node currentNode : this.nodes) {
+			((AbstractNode)currentNode).enabled = Boolean.TRUE;
+			((AbstractNode)currentNode).selected = Boolean.FALSE;
+		}
+	}
 
-    @Override
-    public void registerCallback(PropertyChangeCallback pCallback) {
-        this.callbacks.add(pCallback);
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void setSingleSelectionSupport(Boolean pSingleSelectionSupport) {
+		this.singleSelectionSupport = pSingleSelectionSupport;
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public Boolean isSingleSelectionSupport() {
+		return this.singleSelectionSupport;
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void registerCallback(GraphModelEventType eventType, PropertyChangeCallback pCallback) {
+		String type = eventType.getType();
+		
+		Set<PropertyChangeCallback> storedCallbacks = this.registeredCallbacks.get(type);
+		if (storedCallbacks == null) {
+			storedCallbacks = new HashSet<PropertyChangeCallback>();
+		}
+		storedCallbacks.add(pCallback);
+		
+		this.registeredCallbacks.put(type, storedCallbacks);
+	}
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        String propertyName = evt.getPropertyName();
-        for (PropertyChangeCallback currentCallbak : this.callbacks) {
-            if (currentCallbak.evaluatePropertyName(propertyName)) {
-                currentCallbak.onPropertyChange(evt);
-            }
-        }
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void propertyChange(PropertyChangeEvent pPropertyChangeEvent) {
+		final String propertyName = pPropertyChangeEvent.getPropertyName();
+		final Set<PropertyChangeCallback> callbacks = this.registeredCallbacks.get(propertyName);
+		if (callbacks != null) {
+			for (PropertyChangeCallback currentCallbak : callbacks) {
+				currentCallbak.onPropertyChange(pPropertyChangeEvent);
+			}
+		}
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void layout(GraphModelLayout pLayout) {
+		pLayout.layout(this);
+	}
 }

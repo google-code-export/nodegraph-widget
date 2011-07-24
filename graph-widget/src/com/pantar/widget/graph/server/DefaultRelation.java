@@ -4,7 +4,10 @@
 package com.pantar.widget.graph.server;
 
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+
+import com.pantar.widget.graph.server.events.RelationEventType;
+import com.pantar.widget.graph.server.events.RelationPropertyChangeSupport;
+import com.pantar.widget.graph.server.events.RelationPropertyChangeSupportImpl;
 
 /**
  * @author mauro.monti
@@ -15,7 +18,7 @@ public class DefaultRelation extends AbstractRelation {
     /**
      * 
      */
-    private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+    private RelationPropertyChangeSupport propertyChangeSupport = new RelationPropertyChangeSupportImpl(this);
 
     /**
      * 
@@ -31,30 +34,44 @@ public class DefaultRelation extends AbstractRelation {
         super(pId);
     }
 
-    @Override
-    public void setNodeFrom(Node from) {
-        Node oldFrom = this.getFrom();
-        if (oldFrom != null && oldFrom.equals(from)) {
-            return;
-        }
-        this.setFrom(from);
-        this.setFromRef(from.getId());
-        this.propertyChangeSupport.firePropertyChange("from", oldFrom, this.getFrom());
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void setNodeFrom(Node pNode) {
+		Node currentNode = this.from;
+		if (currentNode != null && currentNode.equals(pNode)) {
+			return;
+		}
+		
+		this.from = pNode;
+		this.fromRef = pNode.getId();
 
-    @Override
-    public void setNodeTo(Node to) {
-        Node oldTo = this.getTo();
-        if (oldTo != null && oldTo.equals(to)) {
-            return;
-        }
-        this.setTo(to);
-        this.setToRef(to.getId());
-        this.propertyChangeSupport.firePropertyChange("to", oldTo, this.getTo());
-    }
+		this.propertyChangeSupport.firePropertyChange(RelationEventType.FROM, currentNode, this.from);
+	}
 
-    @Override
-    public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
-        this.propertyChangeSupport.addPropertyChangeListener(propertyChangeListener);
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void setNodeTo(Node pNode) {
+		Node currentNode = this.to;
+		if (currentNode != null && currentNode.equals(pNode)) {
+			return;
+		}
+		
+		this.to = pNode;
+		this.toRef = pNode.getId();
+
+		this.propertyChangeSupport.firePropertyChange(RelationEventType.TO, currentNode, this.to);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void addPropertyChangeListener(PropertyChangeListener pPropertyChangeListener) {
+        this.propertyChangeSupport.addPropertyChangeListener(pPropertyChangeListener);
+	}
+    
 }

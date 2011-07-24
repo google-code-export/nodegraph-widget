@@ -5,6 +5,8 @@ package com.pantar.widget.graph.server;
 
 import java.beans.PropertyChangeListener;
 
+import com.pantar.widget.graph.shared.model.TypeEnum;
+
 /**
  * @author mauro.monti
  * 
@@ -34,6 +36,11 @@ public interface Node {
     /**
      * @return
      */
+    Boolean hasLabel();
+
+    /**
+     * @return
+     */
     String getLabel();
 
     /**
@@ -41,11 +48,6 @@ public interface Node {
      * @return
      */
     void setLabel(String pLabel);
-
-    /**
-     * @return
-     */
-    Boolean hasLabel();
 
     /**
      * @param pPosX
@@ -59,12 +61,43 @@ public interface Node {
     Boolean isSelected();
 
     /**
-     * @param pSelected
+     * 
      */
-    void setSelected(Boolean pSelected);
+    void select();
+    
+    /**
+     * 
+     */
+    void unselect();
 
+    /**
+     * @return
+     */
+    Boolean isEnabled();
+
+    /**
+     * 
+     */
+    void enable();
+
+    /**
+     * 
+     */
+    void disable();
+
+    /**
+     * @return
+     */
+    NodeStyle getStyle();
+    
+    /**
+     * @param pNodeStyle
+     */
+    void setStyle(NodeStyle pNodeStyle);
+    
     /**
      * @param propertyChangeListener
      */
     void addPropertyChangeListener(PropertyChangeListener propertyChangeListener);
+
 }

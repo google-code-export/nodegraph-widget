@@ -1,6 +1,8 @@
 package com.pantar.widget.graph.client.ui;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.vectomatic.dom.svg.OMSVGSVGElement;
@@ -10,11 +12,17 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
+import com.pantar.widget.graph.shared.GraphConstants;
+import com.pantar.widget.graph.shared.model.RelationTypeEnum;
+import com.pantar.widget.graph.shared.model.TypeEnum;
+import com.pathf.gwt.util.json.client.JSONWrapper;
 import com.vaadin.terminal.gwt.client.ApplicationConnection;
 import com.vaadin.terminal.gwt.client.Paintable;
 import com.vaadin.terminal.gwt.client.UIDL;
@@ -29,7 +37,7 @@ public class VGraphComponent extends Composite implements Paintable, ClickHandle
 	/**
 	 * Set the CSS class name to allow styling.
 	 */
-	public static final String CLASSNAME = "v-graphcomponent";
+	public static final String CSS_COMPONENT_CLASSNAME = "v-graphcomponent";
 
 	/**
 	 * The client side widget identifier
@@ -57,6 +65,16 @@ public class VGraphComponent extends Composite implements Paintable, ClickHandle
 	protected OMSVGSVGElement canvas = OMSVGParser.currentDocument().createSVGSVGElement();
 
 	/**
+	 * Indicates if the graph model was initialized.
+	 */
+	protected Boolean graphModelInitialized = Boolean.FALSE;
+	
+	/**
+	 * 
+	 */
+	protected Boolean singleSelectionSupport = Boolean.FALSE;
+	
+	/**
 	 * The constructor should first call super() to initialize the component and
 	 * then handle any initialization relevant to Vaadin.
 	 */
@@ -65,7 +83,7 @@ public class VGraphComponent extends Composite implements Paintable, ClickHandle
 		this.initWidget(this.root);
 
 		// =
-		this.setStyleName(CLASSNAME);
+		this.setStyleName(CSS_COMPONENT_CLASSNAME);
 	}
 
 	/**
@@ -80,7 +98,7 @@ public class VGraphComponent extends Composite implements Paintable, ClickHandle
 
 		// =
 		this.root.getElement().getStyle().setPosition(Position.ABSOLUTE);
-		this.root.getElement().getStyle().setBackgroundColor("white");
+		this.root.getElement().getStyle().setBackgroundColor(GraphConstants.DOM.CSS_WHITE_VALUE);
 		this.root.getElement().appendChild(this.canvas.getElement());
 	}
 
@@ -103,24 +121,124 @@ public class VGraphComponent extends Composite implements Paintable, ClickHandle
 		this.client = client;
 		this.paintableId = uidl.getId();
 
-		// = Temp.
+		// = Initialize Graph.
+		if (!this.graphModelInitialized) {
+			this.initializeGraphModel(uidl);
+			this.graphModelInitialized = Boolean.TRUE;
+		}
+	}
 
-		final Node node1 = new Node(this, "1", NodeTypeEnum.CUSTOM_NODE);
-		node1.setSelected(Boolean.TRUE);
+	/**
+	 * @param pUidl
+	 */
+	private void initializeGraphModel(final UIDL pUidl) {
+		if (pUidl.hasAttribute(GraphConstants.MODEL.GRAPHMODEL_NAME) && !this.graphModelInitialized) {
+			final String graphModel = pUidl.getStringAttribute(GraphConstants.MODEL.GRAPHMODEL_NAME);
+			final JSONValue jsGraphModel = JSONParser.parseLenient(graphModel);
+			final JSONWrapper graphModelWrapper = new JSONWrapper(jsGraphModel);
 
-		final Node node2 = new Node(this, "2", NodeTypeEnum.CUSTOM_NODE);
-		node2.setSelected(Boolean.TRUE);
+			// = GraphModel Properties.
+			this.singleSelectionSupport = graphModelWrapper.get(GraphConstants.MODEL.ATTR_SINGLE_SELECTION_SUPPORT).booleanValue();
 
-		final Node node3 = new Node(this, "3", NodeTypeEnum.CUSTOM_NODE);
-		node2.setSelected(Boolean.TRUE);
+			// = Nodes.
+			this.createNodes(graphModelWrapper.get(GraphConstants.MODEL.NODES_NAME));
 
-		final Relation r1 = new Relation(this, node1, node2, RelationTypeEnum.BEZIER, new DefaultRelationStyle());
-		final Relation r2 = new Relation(this, node1, node1, RelationTypeEnum.BEZIER, new DefaultRelationStyle());
-		final Relation r3 = new Relation(this, node1, node3, RelationTypeEnum.LINE, new DefaultRelationStyle());
+			// = Relations.
+			this.createRelations(graphModelWrapper.get(GraphConstants.MODEL.RELATIONS_NAME));
 
-		this.add(node1);
-		this.add(node2);
-		this.add(node3);
+			this.graphModelInitialized = true;
+		}
+	}
+
+	/**
+	 * @param pRelations
+	 */
+	private void createRelations(final JSONWrapper pRelations) {
+		final int quantity = pRelations.size();
+		for (int idx = 0; idx < quantity; idx++) {
+			final JSONWrapper nodeWrapper = pRelations.get(idx);
+
+			final String fromRef = nodeWrapper.get(GraphConstants.MODEL.ATTR_FROM_REF).stringValue();
+			final String toRef = nodeWrapper.get(GraphConstants.MODEL.ATTR_TO_REF).stringValue();
+			final String type = nodeWrapper.get(GraphConstants.MODEL.ATTR_RELATION_TYPE).stringValue();
+
+			final Node from = this.getNodeById(fromRef);
+			final Node to = this.getNodeById(toRef);
+			
+			final RelationTypeEnum relationType = RelationTypeEnum.valueOf(type);
+
+			final RelationStyle relationStyle = createRelationStyle(nodeWrapper.get(GraphConstants.MODEL.ATTR_STYLE));
+			final Relation relation = new Relation(this, from, to, relationType, relationStyle);
+			
+			from.addOutgoing(relation);
+			to.addIncoming(relation);
+		}
+	}
+
+	/**
+	 * @param pNodes
+	 */
+	private void createNodes(final JSONWrapper pNodes) {
+		final int quantity = pNodes.size();
+		for (int idx = 0; idx < quantity; idx++) {
+			final JSONWrapper nodeWrapper = pNodes.get(idx);
+
+			// = Mandatory attributes.
+			final String id = nodeWrapper.get(GraphConstants.MODEL.ATTR_ID).stringValue();
+			final String type = nodeWrapper.get(GraphConstants.MODEL.ATTR_TYPE).stringValue();
+			final TypeEnum nodeType = TypeEnum.valueOf(type);
+			
+			// = Optional attributes.
+			final Double posX = nodeWrapper.get(GraphConstants.MODEL.ATTR_X).numberValue();
+			final Double posY = nodeWrapper.get(GraphConstants.MODEL.ATTR_Y).numberValue();
+
+			final Boolean enabled = nodeWrapper.get(GraphConstants.MODEL.ATTR_ENABLED).booleanValue();
+			final Boolean selected = nodeWrapper.get(GraphConstants.MODEL.ATTR_SELECTED).booleanValue();
+
+			final String label = nodeWrapper.get(GraphConstants.MODEL.ATTR_LABEL).stringValue();
+
+			Node node = null;
+			if (posX == null || posY == null) {
+				node = new Node(this, id, nodeType);
+				
+			} else {
+				NodeStyle nodeStyle = createNodeStyle(nodeWrapper);
+				node = new Node(this, id, nodeType, nodeStyle, posX, posY);
+				node.setEnabled(enabled);
+				node.setSelected(selected);
+				
+				if (label != null && !label.isEmpty()) {
+					node.setLabel(label);
+				}
+			}
+			
+			this.nodes.add(node);
+		}
+
+		this.updateNodes();
+	}
+	
+	/**
+	 * @param nodeType 
+	 * @param nodeWrapper
+	 * @return
+	 */
+	private NodeStyle createNodeStyle(JSONWrapper nodeWrapper) {
+		return new DefaultNodeStyle();
+	}
+	
+	/**
+	 * @param pRelationAttributes
+	 * @return
+	 */
+	private RelationStyle createRelationStyle(JSONWrapper pRelationAttributes) {
+		final Map<String, String> styleAttributes = new HashMap<String, String>();
+		final Set<String> keys = pRelationAttributes.keySet();
+		for (String currentKey : keys) {
+			styleAttributes.put(currentKey, pRelationAttributes.get(currentKey).getValue().toString());
+		}
+		return new DefaultRelationStyle(styleAttributes);
+		
 	}
 
 	/**
@@ -187,6 +305,13 @@ public class VGraphComponent extends Composite implements Paintable, ClickHandle
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * @return
+	 */
+	protected Set<Node> getNodes() {
+		return this.nodes;
 	}
 
 	/**
