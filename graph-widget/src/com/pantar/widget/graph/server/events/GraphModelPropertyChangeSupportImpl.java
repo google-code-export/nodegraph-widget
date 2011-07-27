@@ -10,7 +10,7 @@ import java.beans.PropertyChangeSupport;
  * @author mauro.monti
  *
  */
-public class DefaultPropertyChangeSupport extends PropertyChangeSupport implements GraphModelPropertyChangeSupport {
+public class GraphModelPropertyChangeSupportImpl extends PropertyChangeSupport implements GraphModelPropertyChangeSupport {
 
 	/**
 	 * 
@@ -20,7 +20,7 @@ public class DefaultPropertyChangeSupport extends PropertyChangeSupport implemen
 	/**
 	 * @param sourceBean
 	 */
-	public DefaultPropertyChangeSupport(Object sourceBean) {
+	public GraphModelPropertyChangeSupportImpl(final Object sourceBean) {
 		super(sourceBean);
 	}
 
@@ -28,7 +28,7 @@ public class DefaultPropertyChangeSupport extends PropertyChangeSupport implemen
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void firePropertyChange(EventType pEventType, Boolean pOldValue, Boolean pNewValue) {
+	public void firePropertyChange(final EventType pEventType, final Boolean pOldValue, final Boolean pNewValue) {
 		super.firePropertyChange(pEventType.getType(), pOldValue, pNewValue);
 	}
 	
@@ -36,7 +36,7 @@ public class DefaultPropertyChangeSupport extends PropertyChangeSupport implemen
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void firePropertyChange(EventType pEventType, Double pOldValue, Double pNewValue) {
+	public void firePropertyChange(final EventType pEventType, final Double pOldValue, final Double pNewValue) {
 		super.firePropertyChange(pEventType.getType(), pOldValue, pNewValue);
 	}
 	
@@ -44,7 +44,7 @@ public class DefaultPropertyChangeSupport extends PropertyChangeSupport implemen
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void firePropertyChange(EventType pEventType, String pOldValue, String pNewValue) {
+	public void firePropertyChange(final EventType pEventType, final String pOldValue, final String pNewValue) {
 		super.firePropertyChange(pEventType.getType(), pOldValue, pNewValue);
 	}
 	
@@ -52,7 +52,7 @@ public class DefaultPropertyChangeSupport extends PropertyChangeSupport implemen
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void firePropertyChange(EventType pEventType, Double[] pOldValue, Double[] pNewValue) {
+	public void firePropertyChange(final EventType pEventType, final Double[] pOldValue, final Double[] pNewValue) {
 		super.firePropertyChange(pEventType.getType(), pOldValue, pNewValue);	
 	}
 	
@@ -60,7 +60,7 @@ public class DefaultPropertyChangeSupport extends PropertyChangeSupport implemen
 	 * {@inheritdoc}
 	 */
 	@Override
-	public synchronized void addPropertyChangeListener(PropertyChangeListener pListener) {
+	public synchronized void addPropertyChangeListener(final PropertyChangeListener pListener) {
 		super.addPropertyChangeListener(pListener);
 	}
 

@@ -8,6 +8,7 @@ import java.beans.PropertyChangeListener;
 import com.pantar.widget.graph.server.events.NodeEventType;
 import com.pantar.widget.graph.server.events.NodePropertyChangeSupport;
 import com.pantar.widget.graph.server.events.NodePropertyChangeSupportImpl;
+import com.pantar.widget.graph.server.style.DefaultNodeStyle;
 
 /**
  * @author mauro.monti
@@ -34,6 +35,14 @@ public class DefaultNode extends AbstractNode {
         super(pId);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    @Override
+    void initialize() {
+    	this.nodeStyle = new DefaultNodeStyle(this);
+    }
+    
 	/**
 	 * {@inheritdoc}
 	 */

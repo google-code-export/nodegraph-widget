@@ -20,8 +20,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.pantar.widget.graph.shared.GraphConstants;
-import com.pantar.widget.graph.shared.model.RelationTypeEnum;
-import com.pantar.widget.graph.shared.model.TypeEnum;
+import com.pantar.widget.graph.shared.component.RelationTypeEnum;
+import com.pantar.widget.graph.shared.component.NodeTypeEnum;
 import com.pathf.gwt.util.json.client.JSONWrapper;
 import com.vaadin.terminal.gwt.client.ApplicationConnection;
 import com.vaadin.terminal.gwt.client.Paintable;
@@ -70,7 +70,7 @@ public class VGraphComponent extends Composite implements Paintable, ClickHandle
 	protected Boolean graphModelInitialized = Boolean.FALSE;
 	
 	/**
-	 * 
+	 * Single selection support.
 	 */
 	protected Boolean singleSelectionSupport = Boolean.FALSE;
 	
@@ -124,7 +124,9 @@ public class VGraphComponent extends Composite implements Paintable, ClickHandle
 		// = Initialize Graph.
 		if (!this.graphModelInitialized) {
 			this.initializeGraphModel(uidl);
-			this.graphModelInitialized = Boolean.TRUE;
+
+			// = Notify initialization.
+			this.client.updateVariable(paintableId, GraphConstants.EVENTS.EVT_GRAPHMODEL_INITIALIZED, Boolean.TRUE, Boolean.TRUE);
 		}
 	}
 
@@ -146,7 +148,7 @@ public class VGraphComponent extends Composite implements Paintable, ClickHandle
 			// = Relations.
 			this.createRelations(graphModelWrapper.get(GraphConstants.MODEL.RELATIONS_NAME));
 
-			this.graphModelInitialized = true;
+			this.graphModelInitialized = Boolean.TRUE;
 		}
 	}
 
@@ -186,7 +188,7 @@ public class VGraphComponent extends Composite implements Paintable, ClickHandle
 			// = Mandatory attributes.
 			final String id = nodeWrapper.get(GraphConstants.MODEL.ATTR_ID).stringValue();
 			final String type = nodeWrapper.get(GraphConstants.MODEL.ATTR_TYPE).stringValue();
-			final TypeEnum nodeType = TypeEnum.valueOf(type);
+			final NodeTypeEnum nodeType = NodeTypeEnum.valueOf(type);
 			
 			// = Optional attributes.
 			final Double posX = nodeWrapper.get(GraphConstants.MODEL.ATTR_X).numberValue();
@@ -202,7 +204,9 @@ public class VGraphComponent extends Composite implements Paintable, ClickHandle
 				node = new Node(this, id, nodeType);
 				
 			} else {
-				NodeStyle nodeStyle = createNodeStyle(nodeWrapper);
+				final JSONWrapper styleWrapper = nodeWrapper.get(GraphConstants.MODEL.ATTR_STYLE);
+				final NodeStyle nodeStyle = createNodeStyle(styleWrapper);
+
 				node = new Node(this, id, nodeType, nodeStyle, posX, posY);
 				node.setEnabled(enabled);
 				node.setSelected(selected);
@@ -211,10 +215,8 @@ public class VGraphComponent extends Composite implements Paintable, ClickHandle
 					node.setLabel(label);
 				}
 			}
-			
 			this.nodes.add(node);
 		}
-
 		this.updateNodes();
 	}
 	
@@ -224,7 +226,15 @@ public class VGraphComponent extends Composite implements Paintable, ClickHandle
 	 * @return
 	 */
 	private NodeStyle createNodeStyle(JSONWrapper nodeWrapper) {
-		return new DefaultNodeStyle();
+		DefaultNodeStyle style = new DefaultNodeStyle();
+
+		style.setStyleClassName(nodeWrapper.get(GraphConstants.DOM.NODE_CSS_FIELD_TYPE_CLASSNAME).stringValue());
+		style.setEnabledStyleClassName(nodeWrapper.get(GraphConstants.DOM.NODE_CSS_FIELD_ENABLED_CLASSNAME).stringValue());
+		style.setDisabledStyleClassName(nodeWrapper.get(GraphConstants.DOM.NODE_CSS_FIELD_DISABLED_CLASSNAME).stringValue());
+		style.setLabelStyleClassName(nodeWrapper.get(GraphConstants.DOM.NODE_CSS_FIELD_LABEL_CLASSNAME).stringValue());
+		style.setSelectedStyleClassName(nodeWrapper.get(GraphConstants.DOM.NODE_CSS_FIELD_SELECTED_CLASSNAME).stringValue());
+		
+		return style;
 	}
 	
 	/**
@@ -238,7 +248,6 @@ public class VGraphComponent extends Composite implements Paintable, ClickHandle
 			styleAttributes.put(currentKey, pRelationAttributes.get(currentKey).getValue().toString());
 		}
 		return new DefaultRelationStyle(styleAttributes);
-		
 	}
 
 	/**

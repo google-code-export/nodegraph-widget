@@ -1,10 +1,11 @@
 /**
  * 
  */
-package com.pantar.widget.graph.server;
+package com.pantar.widget.graph.server.style;
 
 import java.util.HashMap;
 
+import com.pantar.widget.graph.server.RelationStyle;
 import com.pantar.widget.graph.shared.GraphConstants;
 
 /**
@@ -55,7 +56,22 @@ public class DefaultRelationStyle extends HashMap<String, String> implements Rel
 		if (pLine == null || pSpace == null) {
 			return;
 		}
-		this.put(GraphConstants.DOM.CSS_STROKE_DASHARRAY_PROPERTY, pLine + "," + pSpace);
+		this.put(GraphConstants.DOM.CSS_STROKE_DASHARRAY_PROPERTY, pLine + GraphConstants.CONST_COMMA + pSpace);
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void setStrokeColor(final String pColor) {
+		this.put(GraphConstants.DOM.CSS_STROKE_VALUE, pColor);
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void setStrokeWidth(final Integer pWidth) {
+		this.put(GraphConstants.DOM.CSS_STROKE_WIDTH_PROPERTY, String.valueOf(pWidth));
+	}
 }

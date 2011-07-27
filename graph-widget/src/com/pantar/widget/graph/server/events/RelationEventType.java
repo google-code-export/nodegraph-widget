@@ -9,7 +9,15 @@ package com.pantar.widget.graph.server.events;
  */
 public enum RelationEventType implements EventType {
 
-	TO, FROM;
+	/**
+	 * 
+	 */
+	TO, 
+	
+	/**
+	 * 
+	 */
+	FROM;
 
 	/**
 	 * {@inheritdoc}

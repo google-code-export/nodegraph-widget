@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.pantar.widget.graph.client.ui;
+package com.pantar.widget.graph.shared.component.style;
 
 
 /**

@@ -28,7 +28,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.UIObject;
 import com.pantar.widget.graph.shared.GraphConstants;
-import com.pantar.widget.graph.shared.model.TypeEnum;
+import com.pantar.widget.graph.shared.component.NodeTypeEnum;
 
 /**
  * @author mauro.monti
@@ -94,7 +94,7 @@ public class Node {
 	/**
 	 * 
 	 */
-	protected TypeEnum nodeTypeEnum;
+	protected NodeTypeEnum nodeTypeEnum;
 
 	/**
 	 * 
@@ -116,7 +116,7 @@ public class Node {
 	 * @param pId
 	 * @param pNodeTypeEnum
 	 */
-	public Node(final VGraphComponent pParent, final String pId, final TypeEnum pNodeTypeEnum) {
+	public Node(final VGraphComponent pParent, final String pId, final NodeTypeEnum pNodeTypeEnum) {
 		this(pParent, pId, pNodeTypeEnum, new DefaultNodeStyle(), 0, 0);
 	}
 
@@ -128,7 +128,7 @@ public class Node {
 	 * @param pX
 	 * @param pY
 	 */
-	public Node(final VGraphComponent pParent, final String pId, final TypeEnum pNodeTypeEnum, final NodeStyle pNodeStyle, final double pX, final double pY) {
+	public Node(final VGraphComponent pParent, final String pId, final NodeTypeEnum pNodeTypeEnum, final NodeStyle pNodeStyle, final double pX, final double pY) {
 		if (pParent == null) {
 			throw new IllegalArgumentException("VGraphComponent cannot be null.");
 		}
@@ -157,10 +157,10 @@ public class Node {
 		this.widget.getElement().setId(this.id);
 
 		this.widget.setStyleName(this.nodeStyle.getStyleClassName());
-		if (!this.nodeTypeEnum.equals(TypeEnum.NODE)) {
-			this.widget.addStyleName(this.nodeTypeEnum.getTypeName());	
-		}
-		
+//		if (!this.nodeTypeEnum.equals(NodeTypeEnum.NODE)) {
+//			this.widget.addStyleName(this.nodeTypeEnum.getTypeName());	
+//		}
+
 		this.widget.getElement().getStyle().setCursor(Cursor.POINTER);
 		this.widget.getElement().getStyle().setPosition(Position.ABSOLUTE);
 		this.widget.getElement().getStyle().setLeft(pX, Unit.PX);
@@ -201,7 +201,7 @@ public class Node {
 				@Override
 				public void onClick(ClickEvent event) {
 					Node.this.setSelected(Boolean.TRUE);
-					Node.this.parent.client.updateVariable(Node.this.parent.paintableId, GraphConstants.MODEL.ATTRIBUTES_NAME, getAttributes(), true);
+					Node.this.parent.client.updateVariable(Node.this.parent.paintableId, GraphConstants.EVENTS.EVT_GRAPHMODEL_ATTR_CHANGED, getAttributes(), true);
 				}
 			}, ClickEvent.getType());
 		}
@@ -210,7 +210,7 @@ public class Node {
 			@Override
 			public void onDoubleClick(DoubleClickEvent event) {
 				Node.this.setSelected((!Node.this.selected));
-				Node.this.parent.client.updateVariable(Node.this.parent.paintableId, GraphConstants.MODEL.ATTRIBUTES_NAME, getAttributes(), true);
+				Node.this.parent.client.updateVariable(Node.this.parent.paintableId, GraphConstants.EVENTS.EVT_GRAPHMODEL_ATTR_CHANGED, getAttributes(), true);
 			}
 		}, DoubleClickEvent.getType());
 
@@ -278,7 +278,7 @@ public class Node {
 					return;
 				}
 				
-				Node.this.parent.client.updateVariable(Node.this.parent.paintableId, GraphConstants.MODEL.ATTRIBUTES_NAME, getAttributes(), true);
+				Node.this.parent.client.updateVariable(Node.this.parent.paintableId, GraphConstants.EVENTS.EVT_GRAPHMODEL_ATTR_CHANGED, getAttributes(), true);
 				event.preventDefault();
 			}
 
@@ -295,8 +295,8 @@ public class Node {
 		} else {
 			this.widget.getElement().appendChild(this.label.getElement());
 		}
-		this.label.setStyleName(GraphConstants.DOM.NODE_CSS_LABEL_CLASSNAME);
 		this.label.getElement().getStyle().setPosition(Position.RELATIVE);
+		this.label.setStyleName(this.nodeStyle.getLabelClassName());
 	}
 	
 	/**

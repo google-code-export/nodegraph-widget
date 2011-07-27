@@ -1,34 +1,20 @@
 /**
  * 
  */
-package com.pantar.widget.graph.shared.model;
+package com.pantar.widget.graph.shared.component;
+
 
 /**
  * @author mauro.monti
  * 
  */
-public enum TypeEnum {
+public enum NodeTypeEnum implements Type {
 
 	/**
 	 * 
 	 */
-	START_NODE("start-node"), 
-	
-	/**
-	 * 
-	 */
 	NODE("node"), 
-	
-	/**
-	 * 
-	 */
-	END_NODE("end-node"), 
-	
-	/**
-	 * 
-	 */
-	RELATION("relation"), 
-	
+			
 	/**
 	 * 
 	 */
@@ -42,14 +28,23 @@ public enum TypeEnum {
 	/**
 	 * @param pTypeName
 	 */
-	private TypeEnum(String pTypeName) {
+	private NodeTypeEnum(String pTypeName) {
 		this.typeName = pTypeName;
 	}
-	
+
 	/**
 	 * @return
 	 */
 	public String getTypeName() {
 		return typeName;
 	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public String getType() {
+		return this.typeName;
+	}
+	
 }
