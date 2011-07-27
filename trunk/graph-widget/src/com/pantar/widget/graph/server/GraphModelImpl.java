@@ -242,7 +242,7 @@ public class GraphModelImpl implements GraphModel, PropertyChangeListener {
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void registerCallback(final EventType[] eventType, final PropertyChangeCallback pCallback) {
+	public void registerCallbacks(final EventType[] eventType, final PropertyChangeCallback pCallback) {
 		for (int idx = 0; idx < eventType.length; idx++) {
 			final EventType currentEventType = eventType[idx];
 			

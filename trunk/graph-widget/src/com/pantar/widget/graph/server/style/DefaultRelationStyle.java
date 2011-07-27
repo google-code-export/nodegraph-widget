@@ -63,15 +63,17 @@ public class DefaultRelationStyle extends HashMap<String, String> implements Rel
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void setStrokeColor(final String pColor) {
+	public RelationStyle strokeColor(final String pColor) {
 		this.put(GraphConstants.DOM.CSS_STROKE_VALUE, pColor);
+		return this;
 	}
 	
 	/**
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void setStrokeWidth(final Integer pWidth) {
+	public RelationStyle strokeWidth(final Integer pWidth) {
 		this.put(GraphConstants.DOM.CSS_STROKE_WIDTH_PROPERTY, String.valueOf(pWidth));
+		return this;
 	}
 }

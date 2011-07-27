@@ -118,7 +118,7 @@ public interface GraphModel {
      * @param eventType
      * @param pCallback
      */
-    void registerCallback(EventType[] eventType, PropertyChangeCallback pCallback);
+    void registerCallbacks(EventType[] eventType, PropertyChangeCallback pCallback);
 
     /**
      * @param pPropertyChangeListener

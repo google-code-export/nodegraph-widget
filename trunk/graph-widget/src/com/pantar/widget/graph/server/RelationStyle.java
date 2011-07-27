@@ -23,11 +23,12 @@ public interface RelationStyle {
 	
 	/**
 	 * @param pColor
+	 * @return
 	 */
-	void setStrokeColor(final String pColor);
+	RelationStyle strokeColor(final String pColor);
 	
 	/**
 	 * @param pWidth
 	 */
-	void setStrokeWidth(final Integer pWidth);
+	RelationStyle strokeWidth(final Integer pWidth);
 }
