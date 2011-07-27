@@ -8,7 +8,7 @@ import java.beans.PropertyChangeListener;
 import com.pantar.widget.graph.server.events.NodeEventType;
 import com.pantar.widget.graph.server.events.NodePropertyChangeSupport;
 import com.pantar.widget.graph.server.events.NodePropertyChangeSupportImpl;
-import com.pantar.widget.graph.server.style.DefaultNodeStyle;
+import com.pantar.widget.graph.server.styles.DefaultNodeStyle;
 
 /**
  * @author mauro.monti

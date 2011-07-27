@@ -5,7 +5,8 @@ package com.pantar.widget.graph.server;
 
 import java.util.UUID;
 
-import com.pantar.widget.graph.server.style.DefaultRelationStyle;
+import com.pantar.widget.graph.server.styles.DefaultRelationStyle;
+import com.pantar.widget.graph.server.styles.RelationStyle;
 import com.pantar.widget.graph.shared.component.RelationTypeEnum;
 
 /**
