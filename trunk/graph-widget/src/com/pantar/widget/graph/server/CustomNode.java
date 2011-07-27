@@ -3,7 +3,7 @@
  */
 package com.pantar.widget.graph.server;
 
-import com.pantar.widget.graph.server.style.CustomNodeStyle;
+import com.pantar.widget.graph.server.styles.CustomNodeStyle;
 import com.pantar.widget.graph.shared.component.NodeTypeEnum;
 
 /**

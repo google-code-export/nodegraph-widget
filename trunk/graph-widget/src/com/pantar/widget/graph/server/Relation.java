@@ -5,6 +5,7 @@ package com.pantar.widget.graph.server;
 
 import java.beans.PropertyChangeListener;
 
+import com.pantar.widget.graph.server.styles.RelationStyle;
 import com.pantar.widget.graph.shared.component.RelationTypeEnum;
 
 /**

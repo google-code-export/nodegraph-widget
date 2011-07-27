@@ -16,6 +16,7 @@ import com.pantar.widget.graph.server.events.GraphModelPropertyChangeSupport;
 import com.pantar.widget.graph.server.events.GraphModelPropertyChangeSupportImpl;
 import com.pantar.widget.graph.server.events.PropertyChangeCallback;
 import com.pantar.widget.graph.server.layout.GraphModelLayout;
+import com.pantar.widget.graph.server.styles.RelationStyle;
 import com.pantar.widget.graph.shared.component.RelationTypeEnum;
 
 /**
