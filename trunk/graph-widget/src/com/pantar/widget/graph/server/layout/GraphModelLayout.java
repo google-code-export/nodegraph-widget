@@ -14,6 +14,6 @@ public interface GraphModelLayout {
 	/**
 	 * @param pGraphModel
 	 */
-	public void layout(GraphModel pGraphModel);
+	public void layout(final GraphModel pGraphModel);
 	
 }

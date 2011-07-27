@@ -21,6 +21,6 @@ public interface RelationType {
 	 * @param pFromPoint
 	 * @param pToPoint
 	 */
-	void update(Point pFromPoint, Point pToPoint);
+	void update(final Point pFromPoint, final Point pToPoint);
 
 }

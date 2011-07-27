@@ -5,8 +5,8 @@ package com.pantar.widget.graph.server;
 
 import java.util.UUID;
 
-import com.pantar.widget.graph.shared.model.RelationTypeEnum;
-import com.pantar.widget.graph.shared.model.TypeEnum;
+import com.pantar.widget.graph.server.style.DefaultRelationStyle;
+import com.pantar.widget.graph.shared.component.RelationTypeEnum;
 
 /**
  * @author mauro.monti
@@ -18,11 +18,6 @@ public abstract class AbstractRelation implements Relation {
 	 * 
 	 */
 	protected String id;
-
-	/**
-	 * 
-	 */
-	protected TypeEnum type = TypeEnum.RELATION;
 
 	/**
 	 * 
@@ -52,14 +47,13 @@ public abstract class AbstractRelation implements Relation {
 	/**
 	 * 
 	 */
-	protected RelationTypeEnum relationType;
+	protected RelationTypeEnum relationType = RelationTypeEnum.LINE;
 
 	/**
 	 * 
 	 */
 	public AbstractRelation() {
 		this.id = UUID.randomUUID().toString();
-		this.relationType = RelationTypeEnum.LINE;
 		this.relationStyle = new DefaultRelationStyle();
 	}
 
@@ -79,14 +73,6 @@ public abstract class AbstractRelation implements Relation {
 	@Override
 	public String getId() {
 		return this.id;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	@Override
-	public TypeEnum getType() {
-		return this.type;
 	}
 
 	/**

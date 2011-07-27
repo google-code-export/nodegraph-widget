@@ -26,25 +26,13 @@ public class LineRelationType extends AbstractRelationType {
 	 */
 	public LineRelationType() {
 		this.omsvgLineElement = OMSVGParser.currentDocument().createSVGLineElement(0, 0, 0, 0);
-//		this.omsvgLineElement.setAttribute(SVGConstants.CSS_STROKE_WIDTH_PROPERTY, "2");
-//		this.omsvgLineElement.setAttribute(SVGConstants.CSS_STROKE_VALUE, "black");
-	}
-	
-	/**
-	 * @param pRelationStyle
-	 */
-	public LineRelationType(RelationStyle pRelationStyle) {
-		this();
-		
-		// = Apply SVG Style Attributes.
-		super.applyAttributes(omsvgLineElement, pRelationStyle);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void applyAttributes(RelationStyle pRelationStyle) {
+	public void applyAttributes(final RelationStyle pRelationStyle) {
 		super.applyAttributes(omsvgLineElement, pRelationStyle);
 	}
 	

@@ -9,7 +9,7 @@ import com.pantar.widget.graph.server.Node;
  * @author mauro.monti
  *
  */
-public class RelationPropertyChangeSupportImpl extends DefaultPropertyChangeSupport implements RelationPropertyChangeSupport {
+public class RelationPropertyChangeSupportImpl extends GraphModelPropertyChangeSupportImpl implements RelationPropertyChangeSupport {
 
 	/**
 	 * 
@@ -19,7 +19,7 @@ public class RelationPropertyChangeSupportImpl extends DefaultPropertyChangeSupp
 	/**
 	 * @param sourceBean
 	 */
-	public RelationPropertyChangeSupportImpl(Object sourceBean) {
+	public RelationPropertyChangeSupportImpl(final Object sourceBean) {
 		super(sourceBean);
 	}
 	
@@ -27,7 +27,7 @@ public class RelationPropertyChangeSupportImpl extends DefaultPropertyChangeSupp
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void firePropertyChange(EventType pEventType, Node pOldNode, Node pNewNode) {
+	public void firePropertyChange(final EventType pEventType, final Node pOldNode, final Node pNewNode) {
 		super.firePropertyChange(pEventType.getType(), pOldNode, pNewNode);
 	}
 }

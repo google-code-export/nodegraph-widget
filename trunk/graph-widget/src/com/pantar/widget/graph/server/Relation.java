@@ -5,8 +5,7 @@ package com.pantar.widget.graph.server;
 
 import java.beans.PropertyChangeListener;
 
-import com.pantar.widget.graph.shared.model.RelationTypeEnum;
-import com.pantar.widget.graph.shared.model.TypeEnum;
+import com.pantar.widget.graph.shared.component.RelationTypeEnum;
 
 /**
  * @author mauro.monti
@@ -20,19 +19,14 @@ public interface Relation {
     String getId();
 
     /**
-     * @return
+     * @param pNode
      */
-    TypeEnum getType();
+    void setNodeFrom(final Node pNode);
 
     /**
      * @param pNode
      */
-    void setNodeFrom(Node pNode);
-
-    /**
-     * @param pNode
-     */
-    void setNodeTo(Node pNode);
+    void setNodeTo(final Node pNode);
     
     /**
      * @return
@@ -62,7 +56,7 @@ public interface Relation {
     /**
      * @param pRelationTypeEnum
      */
-    void setRelationType(RelationTypeEnum pRelationTypeEnum);
+    void setRelationType(final RelationTypeEnum pRelationTypeEnum);
     
     /**
      * @return
@@ -72,10 +66,10 @@ public interface Relation {
     /**
      * @param pRelationStyle
      */
-    void setStyle(RelationStyle pRelationStyle);
+    void setStyle(final RelationStyle pRelationStyle);
     
     /**
      * @param propertyChangeListener
      */
-    void addPropertyChangeListener(PropertyChangeListener propertyChangeListener);
+    void addPropertyChangeListener(final PropertyChangeListener propertyChangeListener);
 }

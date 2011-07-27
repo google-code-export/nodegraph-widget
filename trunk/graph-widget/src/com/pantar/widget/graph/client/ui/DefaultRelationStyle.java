@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.pantar.widget.graph.shared.model.RelationTypeEnum;
+import com.pantar.widget.graph.shared.component.RelationTypeEnum;
 
 /**
  * @author mauro.monti

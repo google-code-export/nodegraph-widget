@@ -14,6 +14,6 @@ public interface PropertyChangeCallback {
     /**
      * @param propertyChangeEvent
      */
-    void onPropertyChange(PropertyChangeEvent propertyChangeEvent);
+    void onPropertyChange(final PropertyChangeEvent propertyChangeEvent);
 
 }

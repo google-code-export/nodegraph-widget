@@ -3,12 +3,13 @@
  */
 package com.pantar.widget.graph.server;
 
+import java.beans.PropertyChangeListener;
 import java.util.Set;
 
 import com.pantar.widget.graph.server.events.EventType;
 import com.pantar.widget.graph.server.events.PropertyChangeCallback;
 import com.pantar.widget.graph.server.layout.GraphModelLayout;
-import com.pantar.widget.graph.shared.model.RelationTypeEnum;
+import com.pantar.widget.graph.shared.component.RelationTypeEnum;
 
 /**
  * @author mauro.monti
@@ -62,6 +63,11 @@ public interface GraphModel {
     void connect(final Node pFrom, final Node pTo, RelationTypeEnum pRelationTypeEnum, RelationStyle pRelationStyle);
     
     /**
+     * @return
+     */
+    Boolean isInitialized();
+    
+    /**
      * @param pId
      * @return
      */
@@ -83,6 +89,16 @@ public interface GraphModel {
     void reset();
     
     /**
+     * 
+     */
+    void unselectAllNodes();
+    
+    /**
+     * 
+     */
+    void disableAllNodes();
+    
+    /**
      * @param pSingleSelectionSupport
      */
     void setSingleSelectionSupport(Boolean pSingleSelectionSupport);
@@ -93,9 +109,21 @@ public interface GraphModel {
     Boolean isSingleSelectionSupport();
     
     /**
-     * @param callback
+     * @param pEventType
+     * @param pCallback
      */
     void registerCallback(EventType pEventType, PropertyChangeCallback pCallback);
+    
+    /**
+     * @param eventType
+     * @param pCallback
+     */
+    void registerCallback(EventType[] eventType, PropertyChangeCallback pCallback);
+
+    /**
+     * @param pPropertyChangeListener
+     */
+    void addPropertyChangeListener(PropertyChangeListener pPropertyChangeListener);
     
     /**
      * @param pLayout

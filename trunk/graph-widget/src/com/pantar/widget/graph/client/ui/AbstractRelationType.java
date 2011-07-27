@@ -7,6 +7,8 @@ import java.util.Set;
 
 import org.vectomatic.dom.svg.OMSVGElement;
 
+import com.pantar.widget.graph.shared.GraphConstants;
+
 /**
  * @author mauro.monti
  * 
@@ -14,19 +16,14 @@ import org.vectomatic.dom.svg.OMSVGElement;
 public abstract class AbstractRelationType implements RelationType {
 
 	/**
-	 * 
-	 */
-	private static final String CONST_DOUBLE_QUOTES = "\"";
-
-	/**
 	 * @param pElement
 	 * @param pAttributes
 	 */
-	protected void applyAttributes(OMSVGElement pElement, RelationStyle pRelationStyle) {
+	protected void applyAttributes(final OMSVGElement pElement, final RelationStyle pRelationStyle) {
 		final Set<String> keys = pRelationStyle.getKeys();
 		for (String currentKey : keys) {
 			String value = pRelationStyle.getStyleValue(currentKey);
-			if (value.contains(AbstractRelationType.CONST_DOUBLE_QUOTES)) {
+			if (value.contains(GraphConstants.CONST_DOUBLE_QUOTES)) {
 				value = value.substring(1, value.length()-1).toString();
 			}
 			pElement.setAttribute(currentKey, value);

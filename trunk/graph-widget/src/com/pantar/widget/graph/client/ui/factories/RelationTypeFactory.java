@@ -8,7 +8,7 @@ import com.pantar.widget.graph.client.ui.BezierRelationType;
 import com.pantar.widget.graph.client.ui.LineRelationType;
 import com.pantar.widget.graph.client.ui.RelationStyle;
 import com.pantar.widget.graph.client.ui.RelationType;
-import com.pantar.widget.graph.shared.model.RelationTypeEnum;
+import com.pantar.widget.graph.shared.component.RelationTypeEnum;
 
 /**
  * @author mauro.monti

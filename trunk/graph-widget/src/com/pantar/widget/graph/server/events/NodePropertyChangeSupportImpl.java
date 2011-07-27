@@ -8,7 +8,7 @@ package com.pantar.widget.graph.server.events;
  * @author mauro.monti
  *
  */
-public class NodePropertyChangeSupportImpl extends DefaultPropertyChangeSupport implements NodePropertyChangeSupport {
+public class NodePropertyChangeSupportImpl extends GraphModelPropertyChangeSupportImpl implements NodePropertyChangeSupport {
 
 	/**
 	 * 
@@ -18,7 +18,7 @@ public class NodePropertyChangeSupportImpl extends DefaultPropertyChangeSupport 
 	/**
 	 * @param sourceBean
 	 */
-	public NodePropertyChangeSupportImpl(Object sourceBean) {
+	public NodePropertyChangeSupportImpl(final Object sourceBean) {
 		super(sourceBean);
 	}
 	

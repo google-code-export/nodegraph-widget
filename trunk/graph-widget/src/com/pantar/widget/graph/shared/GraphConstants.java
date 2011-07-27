@@ -17,14 +17,21 @@ public interface GraphConstants {
 	String CONST_COLON = ":";
 	String CONST_SEMICOLON = ";";
 	String CONST_COMMA = ",";
+	String CONST_SPACE = " ";
 	
 	// = DOM Constants.
 	interface DOM {
-		String NODE_CSS_TYPE_CLASSNAME = "node";
-		String NODE_CSS_SELECTED_CLASSNAME = "selected";
-		String NODE_CSS_ENABLED_CLASSNAME = "enabled";
-		String NODE_CSS_DISABLED_CLASSNAME = "disabled";
-		String NODE_CSS_LABEL_CLASSNAME = "label";
+		String NODE_CSS_FIELD_VALUE_TYPE_CLASSNAME = "node";
+		String NODE_CSS_FIELD_VALUE_SELECTED_CLASSNAME = "selected";
+		String NODE_CSS_FIELD_VALUE_ENABLED_CLASSNAME = "enabled";
+		String NODE_CSS_FIELD_VALUE_DISABLED_CLASSNAME = "disabled";
+		String NODE_CSS_FIELD_VALUE_LABEL_CLASSNAME = "label";
+
+		String NODE_CSS_FIELD_TYPE_CLASSNAME = "styleClassName";
+		String NODE_CSS_FIELD_SELECTED_CLASSNAME = "selectedClassName";
+		String NODE_CSS_FIELD_ENABLED_CLASSNAME = "enabledClassName";
+		String NODE_CSS_FIELD_DISABLED_CLASSNAME = "disabledClassName";
+		String NODE_CSS_FIELD_LABEL_CLASSNAME = "labelClassName";
 
 	    // = CSS tags.
 	    String CSS_ALIGNMENT_BASELINE_PROPERTY = "alignment-baseline";
@@ -432,5 +439,10 @@ public interface GraphConstants {
 		String ATTR_STYLE = "style";
 		String ATTR_SINGLE_SELECTION_SUPPORT = "singleSelectionSupport";
 	}
-
+	
+	// = Events Constants.
+	interface EVENTS {
+		String EVT_GRAPHMODEL_INITIALIZED = "graph-model-initialized";
+		String EVT_GRAPHMODEL_ATTR_CHANGED = "graph-model-attr-changed";
+	}
 }

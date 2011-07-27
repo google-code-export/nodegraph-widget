@@ -3,7 +3,7 @@ package com.pantar.widget.graph.client.ui;
 import com.google.gwt.touch.client.Point;
 import com.pantar.widget.graph.client.ui.factories.RelationTypeFactory;
 import com.pantar.widget.graph.shared.GraphConstants;
-import com.pantar.widget.graph.shared.model.RelationTypeEnum;
+import com.pantar.widget.graph.shared.component.RelationTypeEnum;
 
 /**
  * @author mauro.monti

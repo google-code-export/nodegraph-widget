@@ -5,7 +5,8 @@ package com.pantar.widget.graph.server;
 
 import java.beans.PropertyChangeListener;
 
-import com.pantar.widget.graph.shared.model.TypeEnum;
+import com.pantar.widget.graph.shared.component.Type;
+import com.pantar.widget.graph.shared.component.style.NodeStyle;
 
 /**
  * @author mauro.monti
@@ -21,7 +22,7 @@ public interface Node {
     /**
      * @return
      */
-    TypeEnum getType();
+    Type getType();
 
     /**
      * @return
@@ -47,13 +48,13 @@ public interface Node {
      * @param pLabel
      * @return
      */
-    void setLabel(String pLabel);
+    void setLabel(final String pLabel);
 
     /**
      * @param pPosX
      * @param pPosY
      */
-    void setPosition(Double pPosX, Double pPosY);
+    void setPosition(final Double pPosX, final Double pPosY);
 
     /**
      * @return
@@ -93,11 +94,11 @@ public interface Node {
     /**
      * @param pNodeStyle
      */
-    void setStyle(NodeStyle pNodeStyle);
+    void setStyle(final NodeStyle pNodeStyle);
     
     /**
      * @param propertyChangeListener
      */
-    void addPropertyChangeListener(PropertyChangeListener propertyChangeListener);
+    void addPropertyChangeListener(final PropertyChangeListener propertyChangeListener);
 
 }

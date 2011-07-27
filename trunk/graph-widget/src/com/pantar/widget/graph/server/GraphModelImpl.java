@@ -11,9 +11,12 @@ import java.util.Map;
 import java.util.Set;
 
 import com.pantar.widget.graph.server.events.EventType;
+import com.pantar.widget.graph.server.events.GraphModelEventType;
+import com.pantar.widget.graph.server.events.GraphModelPropertyChangeSupport;
+import com.pantar.widget.graph.server.events.GraphModelPropertyChangeSupportImpl;
 import com.pantar.widget.graph.server.events.PropertyChangeCallback;
 import com.pantar.widget.graph.server.layout.GraphModelLayout;
-import com.pantar.widget.graph.shared.model.RelationTypeEnum;
+import com.pantar.widget.graph.shared.component.RelationTypeEnum;
 
 /**
  * @author mauro.monti
@@ -21,27 +24,44 @@ import com.pantar.widget.graph.shared.model.RelationTypeEnum;
  */
 public class GraphModelImpl implements GraphModel, PropertyChangeListener {
 
-    /**
-     * 
-     */
-    private final Map<String, Set<PropertyChangeCallback>> registeredCallbacks = new HashMap<String, Set<PropertyChangeCallback>>();
-    
-    /**
-     * 
-     */
-    private final Set<Node> nodes = new HashSet<Node>();
-    
-    /**
-     * 
-     */
-    private final Set<Relation> relations = new HashSet<Relation>();
+	/**
+	 * 
+	 */
+	private final GraphModelPropertyChangeSupport propertyChangeSupport = new GraphModelPropertyChangeSupportImpl(this);
 
     /**
      * 
      */
-    private boolean singleSelectionSupport = Boolean.FALSE;
+	private final Map<String, Set<PropertyChangeCallback>> registeredCallbacks = new HashMap<String, Set<PropertyChangeCallback>>();
     
-	/**
+    /**
+     * 
+     */
+    protected final Set<Node> nodes = new HashSet<Node>();
+    
+    /**
+     * 
+     */
+    protected final Set<Relation> relations = new HashSet<Relation>();
+
+    /**
+     * 
+     */
+    protected boolean singleSelectionSupport = Boolean.FALSE;
+    
+    /**
+     * 
+     */
+    protected boolean initialized = Boolean.FALSE;
+	
+    /**
+     * 
+     */
+    public GraphModelImpl() {
+    	this.addPropertyChangeListener(this);
+	}
+    
+    /**
 	 * {@inheritdoc}
 	 */
 	@Override
@@ -156,9 +176,11 @@ public class GraphModelImpl implements GraphModel, PropertyChangeListener {
 	 */
 	@Override
 	public void reset() {
-		for (Node currentNode : this.nodes) {
-			((AbstractNode)currentNode).enabled = Boolean.TRUE;
-			((AbstractNode)currentNode).selected = Boolean.FALSE;
+		for (final Node currentNode : this.nodes) {
+			final AbstractNode abstractNode = (AbstractNode) currentNode;
+
+			abstractNode.setEnabled(Boolean.TRUE);
+			abstractNode.setSelected(Boolean.FALSE);
 		}
 	}
 
@@ -166,7 +188,29 @@ public class GraphModelImpl implements GraphModel, PropertyChangeListener {
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void setSingleSelectionSupport(Boolean pSingleSelectionSupport) {
+	public void unselectAllNodes() {
+		for (final Node currentNode : this.nodes) {
+			final AbstractNode abstractNode = (AbstractNode) currentNode;
+			abstractNode.setSelected(Boolean.FALSE);
+		}
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void disableAllNodes() {
+		for (final Node currentNode : this.nodes) {
+			final AbstractNode abstractNode = (AbstractNode) currentNode;
+			abstractNode.setEnabled(Boolean.FALSE);
+		}
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void setSingleSelectionSupport(final Boolean pSingleSelectionSupport) {
 		this.singleSelectionSupport = pSingleSelectionSupport;
 	}
 	
@@ -182,7 +226,7 @@ public class GraphModelImpl implements GraphModel, PropertyChangeListener {
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void registerCallback(EventType eventType, PropertyChangeCallback pCallback) {
+	public void registerCallback(final EventType eventType, final PropertyChangeCallback pCallback) {
 		String type = eventType.getType();
 		
 		Set<PropertyChangeCallback> storedCallbacks = this.registeredCallbacks.get(type);
@@ -198,7 +242,19 @@ public class GraphModelImpl implements GraphModel, PropertyChangeListener {
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void propertyChange(PropertyChangeEvent pPropertyChangeEvent) {
+	public void registerCallback(final EventType[] eventType, final PropertyChangeCallback pCallback) {
+		for (int idx = 0; idx < eventType.length; idx++) {
+			final EventType currentEventType = eventType[idx];
+			
+			this.registerCallback(currentEventType, pCallback);
+		}
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void propertyChange(final PropertyChangeEvent pPropertyChangeEvent) {
 		final String propertyName = pPropertyChangeEvent.getPropertyName();
 		final Set<PropertyChangeCallback> callbacks = this.registeredCallbacks.get(propertyName);
 		if (callbacks != null) {
@@ -212,7 +268,34 @@ public class GraphModelImpl implements GraphModel, PropertyChangeListener {
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void layout(GraphModelLayout pLayout) {
+	public Boolean isInitialized() {
+		return this.initialized;
+	}
+	
+	/**
+	 * Change the initialized state and fires the notification change.
+	 */
+	protected void initialize() {
+		final Boolean currentValue = this.initialized;
+		this.initialized = Boolean.TRUE;
+
+		this.propertyChangeSupport.firePropertyChange(GraphModelEventType.INITIALIZED, currentValue, this.initialized);
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void layout(final GraphModelLayout pLayout) {
 		pLayout.layout(this);
 	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void addPropertyChangeListener(PropertyChangeListener pPropertyChangeListener) {
+		this.propertyChangeSupport.addPropertyChangeListener(pPropertyChangeListener);
+	}
+	
 }

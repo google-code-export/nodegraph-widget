@@ -16,6 +16,6 @@ public interface RelationPropertyChangeSupport extends GraphModelPropertyChangeS
 	 * @param pOldNode
 	 * @param pNewNode
 	 */
-	void firePropertyChange(EventType pEventType, Node pOldNode, Node pNewNode);
+	void firePropertyChange(final EventType pEventType, final Node pOldNode, final Node pNewNode);
 	
 }

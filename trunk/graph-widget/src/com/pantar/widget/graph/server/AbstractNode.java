@@ -7,7 +7,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import com.pantar.widget.graph.shared.model.TypeEnum;
+import com.pantar.widget.graph.shared.component.Type;
+import com.pantar.widget.graph.shared.component.NodeTypeEnum;
+import com.pantar.widget.graph.shared.component.style.NodeStyle;
 
 /**
  * @author mauro.monti
@@ -20,11 +22,6 @@ public abstract class AbstractNode implements Node {
      */
     protected String id;
     
-    /**
-     * 
-     */
-    protected TypeEnum type = TypeEnum.NODE;
-
     /**
      * 
      */
@@ -64,6 +61,11 @@ public abstract class AbstractNode implements Node {
      * 
      */
     protected NodeStyle nodeStyle;
+
+    /**
+     * 
+     */
+    protected Type type = NodeTypeEnum.NODE;
     
     /**
      * 
@@ -77,6 +79,8 @@ public abstract class AbstractNode implements Node {
         this.id = UUID.randomUUID().toString();
         this.enabled = Boolean.TRUE;
         this.selected = Boolean.FALSE;
+        
+        this.initialize();
     }
 
     /**
@@ -89,6 +93,11 @@ public abstract class AbstractNode implements Node {
         }
     }
 
+    /**
+     * 
+     */
+    abstract void initialize();
+    
 	/**
 	 * {@inheritdoc}
 	 */
@@ -101,10 +110,10 @@ public abstract class AbstractNode implements Node {
 	 * {@inheritdoc}
 	 */
 	@Override
-	public TypeEnum getType() {
+	public Type getType() {
 		return this.type;
 	}
-
+	
 	/**
 	 * {@inheritdoc}
 	 */
@@ -114,6 +123,13 @@ public abstract class AbstractNode implements Node {
 	}
 
 	/**
+	 * @param x
+	 */
+	public void setX(final Double x) {
+		this.x = x;
+	}
+	
+	/**
 	 * {@inheritdoc}
 	 */
 	@Override
@@ -121,6 +137,13 @@ public abstract class AbstractNode implements Node {
 		return this.y;
 	}
 
+	/**
+	 * @param y
+	 */
+	public void setY(final Double y) {
+		this.y = y;
+	}
+	
 	/**
 	 * {@inheritdoc}
 	 */
@@ -136,7 +159,15 @@ public abstract class AbstractNode implements Node {
 	public String getLabel() {
 		return this.label;
 	}
-
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void setLabel(final String pLabel) {
+		this.label = pLabel;
+	}
+	
 	/**
 	 * {@inheritdoc}
 	 */
@@ -146,6 +177,13 @@ public abstract class AbstractNode implements Node {
 	}
 
 	/**
+	 * @param selected
+	 */
+	public void setSelected(Boolean selected) {
+		this.selected = selected;
+	}
+	
+	/**
 	 * {@inheritdoc}
 	 */
 	@Override
@@ -153,6 +191,13 @@ public abstract class AbstractNode implements Node {
 		return this.enabled;
 	}
 
+	/**
+	 * @param enabled
+	 */
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
+	
 	/**
 	 * {@inheritdoc}
 	 */
@@ -165,8 +210,14 @@ public abstract class AbstractNode implements Node {
 	 * {@inheritdoc}
 	 */
 	@Override
-	public void setStyle(NodeStyle pNodeStyle) {
+	public void setStyle(final NodeStyle pNodeStyle) {
 		this.nodeStyle = pNodeStyle;
 	}
     
+	/**
+	 * @param graphModel
+	 */
+	public void setGraphModel(final GraphModel graphModel) {
+		this.graphModel = graphModel;
+	}
 }
