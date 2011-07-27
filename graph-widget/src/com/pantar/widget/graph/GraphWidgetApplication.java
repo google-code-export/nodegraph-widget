@@ -19,7 +19,6 @@ import com.pantar.widget.graph.shared.GraphConstants;
 import com.pantar.widget.graph.shared.component.RelationTypeEnum;
 import com.vaadin.Application;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 /**
@@ -33,17 +32,35 @@ public class GraphWidgetApplication extends Application {
 	 */
 	private static final long serialVersionUID = -1733587095488273477L;
 
+	/**
+	 * {@inheritdoc}
+	 */
 	@Override
 	public void init() {
-		HorizontalLayout hl = new HorizontalLayout();
+		final Window mainWindow = new Window("NodeGraph Widget Application");
+		final HorizontalLayout hl = new HorizontalLayout();
 		hl.setSizeFull();
-		final Window mainWindow = new Window("Graph Widget Application");
+		
+		final GraphComponent nodeGraphWidget = getNodeGraph();		
+
 		mainWindow.setContent(hl);
+		mainWindow.addComponent(nodeGraphWidget);
+		mainWindow.setSizeFull();
+
+		this.setMainWindow(mainWindow);
+	}
+
+	/**
+	 * @return
+	 */
+	private GraphComponent getNodeGraph() {
+		// = Retrive the model.
+		final GraphModel graphModel = this.getGraphModel();
 		
-		GraphModel graphModel = this.getGraphModel();
-		
-		EventType[] eventTypes = { NodeEventType.POSITION, GraphModelEventType.INITIALIZED };
-		graphModel.registerCallback(eventTypes, new PropertyChangeCallback() {
+		final EventType[] eventTypes = { NodeEventType.SELECTED, NodeEventType.POSITION, GraphModelEventType.INITIALIZED };
+
+		// = Register on some events.
+		graphModel.registerCallbacks(eventTypes, new PropertyChangeCallback() {
 			
 			/**
 			 * {@inheritdoc}
@@ -55,43 +72,59 @@ public class GraphWidgetApplication extends Application {
 				System.out.println("Old Value:" + propertyChangeEvent.getOldValue());
 			}
 		});
+
+		// = Apply some "intelligent" layout to the nodes.
 		graphModel.layout(new GraphModelRandomLayout());
 		
+		// = Create the component.
 		final GraphComponent component = new GraphComponent(graphModel);
-		
-		mainWindow.addComponent(component);
-		mainWindow.setSizeFull();
+		component.setSizeFull();
 
-		this.setMainWindow(mainWindow);
+		return component;
 	}
 
+	/**
+	 * @return
+	 */
 	private GraphModel getGraphModel() {
+		// = Create the model.
 		final GraphModel graphModel = GraphModelFactory.getGraphModelInstance();
+		
+		// = Support for single click to select nodes.
 		graphModel.setSingleSelectionSupport(Boolean.TRUE);
 		
+		// = Create some nodes.
 		Node start = new DefaultNode();
-		start.setPosition(0D, 0D);
-	
+		start.setLabel("Start");
+		
 		Node nodeA = new DefaultNode();
-		nodeA.setPosition(100D, 100D);
 		nodeA.setLabel("NodeA");
 		
 		Node nodeB = new DefaultNode();
-		nodeB.setPosition(200D, 200D);
 		nodeB.setLabel("NodeB");
 	
 		Node end = new DefaultNode();
-		start.setPosition(300D, 150D);
+		end.setLabel("End");
 
-		Node cn = new CustomNode();
+		// = Custom nodes.
+		Node cn = new CustomNode("my-custom-node", "my-custom-node-identifier");
 		
-		RelationStyle dashedBlue = new DefaultRelationStyle(GraphConstants.DOM.CSS_BLUE_VALUE, 2);
+		// = Nodes meet nodes!.
+		final RelationStyle dashedBlue = new DefaultRelationStyle(GraphConstants.DOM.CSS_BLUE_VALUE, 2);
 		dashedBlue.setDashedStroke(5, 5);
 		
-		graphModel.connect(start, nodeA, new DefaultRelationStyle(GraphConstants.DOM.CSS_RED_VALUE, 2));
-		graphModel.connect(nodeA, nodeB, RelationTypeEnum.BEZIER, dashedBlue);
-		graphModel.connect(nodeB, end, RelationTypeEnum.LINE);
+		final RelationStyle straightRed = new DefaultRelationStyle();
+		straightRed.strokeColor(GraphConstants.DOM.CSS_RED_VALUE).strokeWidth(3);
+		
+		final RelationStyle defaultNormalBlack = new DefaultRelationStyle();
+		
+		// = Tie all the stuff.
+		graphModel.connect(start, nodeA, straightRed);
+		graphModel.connect(nodeA, nodeB, dashedBlue);
+		graphModel.connect(nodeB, end, defaultNormalBlack);
 		graphModel.connect(nodeB, cn, RelationTypeEnum.LINE);
+		graphModel.connect(nodeA, cn, RelationTypeEnum.BEZIER, dashedBlue);
+		graphModel.connect(cn, end, RelationTypeEnum.BEZIER);
 		
 		return graphModel;
 	}
