@@ -1,0 +1,23 @@
+@import "../reindeer/styles.css";
+
+.custom-node.console {
+    background: url("images/konsole-icon.png");
+	width: 128px;
+    height: 128px;
+}
+.custom-node.console.selected {
+    background: url("images/konsole-icon.png");
+    width: 128px;
+    height: 128px;
+}
+
+.custom-node.folder-mail {
+    background: url("images/folder-mail-icon.png");
+	width: 128px;
+    height: 128px;
+}
+.custom-node.folder-mail.selected {
+    background: url("images/folder-mail-icon.png");
+    width: 128px;
+    height: 128px;
+}
