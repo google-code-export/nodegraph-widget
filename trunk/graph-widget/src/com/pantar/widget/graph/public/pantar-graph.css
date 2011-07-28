@@ -12,9 +12,9 @@
 .custom-node.automatic.selected { width: 70px; height: 50px; background: url("images/automatic-selected.png"); }
 .custom-node.automatic.enabled { width: 70px; height: 50px;	background: url("images/automatic-enabled.png"); }
 
-.custom-node.begin { width: 36px; height: 36px;	background: url("images/automatic.png"); }
-.custom-node.begin.selected { width: 36px; height: 36px; background: url("images/automatic-selected.png"); }
-.custom-node.begin.enabled { width: 36px; height: 36px;	background: url("images/automatic-enabled.png"); }
+.custom-node.begin { width: 36px; height: 36px;	background: url("images/begin.png"); }
+.custom-node.begin.selected { width: 36px; height: 36px; background: url("images/begin-selected.png"); }
+.custom-node.begin.enabled { width: 36px; height: 36px;	background: url("images/begin-enabled.png"); }
 
 .custom-node.compensate { width: 37px; height: 37px; background: url("images/compensate.png"); }
 .custom-node.compensate.selected { width: 37px; height: 37px; background: url("images/compensate-selected.png"); }
