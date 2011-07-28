@@ -43,7 +43,7 @@ public class GraphComponent extends AbstractComponent {
 		this.graphModel = pGraphModel;
 		this.provider = new DefaultJSONProvider();
 		
-		String[] exclusionList = { "*.class", "*.nodeFrom", "*.nodeTo" };
+		String[] exclusionList = { "*.class", "*.graphModel", "*.nodeFrom", "*.nodeTo" };
 		for (String expression : Arrays.asList(exclusionList)) {
 			this.provider.addExclusion(expression);
 		}
