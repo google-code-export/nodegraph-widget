@@ -8,6 +8,10 @@ import com.pantar.widget.graph.server.GraphComponent;
 import com.pantar.widget.graph.server.GraphModel;
 import com.pantar.widget.graph.server.Node;
 import com.pantar.widget.graph.server.elements.AutomaticNode;
+import com.pantar.widget.graph.server.elements.BeginNode;
+import com.pantar.widget.graph.server.elements.EndNode;
+import com.pantar.widget.graph.server.elements.ProcessCreationNode;
+import com.pantar.widget.graph.server.elements.SplitNode;
 import com.pantar.widget.graph.server.events.EventType;
 import com.pantar.widget.graph.server.events.GraphModelEventType;
 import com.pantar.widget.graph.server.events.NodeEventType;
@@ -54,7 +58,7 @@ public class GraphWidgetApplication extends Application {
         openWindow.addListener(new Button.ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
-				final Window subwindow = new Window("A modal subwindow");
+				final Window subwindow = new Window("Node Graph Widget");
 				subwindow.setModal(true);
 				
 				final VerticalLayout layout = (VerticalLayout) subwindow.getContent();
@@ -124,8 +128,9 @@ public class GraphWidgetApplication extends Application {
 		graphModel.setSingleSelectionSupport(Boolean.TRUE);
 		
 		// = Create some nodes.
-		Node start = new DefaultNode();
-		start.setLabel("Start");
+		Node begin = new BeginNode();
+		
+		Node splitNode = new SplitNode();
 		
 		Node nodeA = new DefaultNode();
 		nodeA.setLabel("NodeA");
@@ -133,11 +138,10 @@ public class GraphWidgetApplication extends Application {
 		Node nodeB = new DefaultNode();
 		nodeB.setLabel("NodeB");
 	
-		Node end = new DefaultNode();
-		end.setLabel("End");
-
-		// = Custom nodes.
-		Node cn = new CustomNode("my-id", "or");
+		Node processCreation = new ProcessCreationNode();
+		processCreation.setLabel("Process");
+	
+		Node end = new EndNode();
 		
 		// = Nodes meet nodes!.
 		final RelationStyle dashedBlue = new DefaultRelationStyle(GraphConstants.DOM.CSS_BLUE_VALUE, 2);
@@ -149,12 +153,12 @@ public class GraphWidgetApplication extends Application {
 		final RelationStyle defaultNormalBlack = new DefaultRelationStyle();
 		
 		// = Tie all the stuff.
-		graphModel.connect(start, nodeA, straightRed);
-		graphModel.connect(nodeA, nodeB, dashedBlue);
-		graphModel.connect(nodeB, end, defaultNormalBlack);
-		graphModel.connect(nodeB, cn, RelationTypeEnum.LINE);
-		graphModel.connect(nodeA, cn, RelationTypeEnum.BEZIER, dashedBlue);
-		graphModel.connect(cn, end, RelationTypeEnum.BEZIER);
+		graphModel.connect(begin, splitNode, straightRed);
+		graphModel.connect(splitNode, nodeA, dashedBlue);
+		graphModel.connect(splitNode, nodeB, defaultNormalBlack);
+		graphModel.connect(nodeA, end, RelationTypeEnum.BEZIER);
+		graphModel.connect(nodeB, processCreation, RelationTypeEnum.BEZIER, new DefaultRelationStyle().strokeColor(GraphConstants.DOM.CSS_GREEN_VALUE));
+		graphModel.connect(processCreation, end, RelationTypeEnum.LINE);
 		
 		return graphModel;
 	}
