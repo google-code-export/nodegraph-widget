@@ -56,4 +56,11 @@ public class CustomNode extends DefaultNode {
 	public String getTypeName() {
 		return typeName;
 	}
+	
+	/**
+	 * @param typeName
+	 */
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
 }

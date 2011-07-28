@@ -7,6 +7,7 @@ import com.pantar.widget.graph.server.DefaultNode;
 import com.pantar.widget.graph.server.GraphComponent;
 import com.pantar.widget.graph.server.GraphModel;
 import com.pantar.widget.graph.server.Node;
+import com.pantar.widget.graph.server.elements.AutomaticNode;
 import com.pantar.widget.graph.server.events.EventType;
 import com.pantar.widget.graph.server.events.GraphModelEventType;
 import com.pantar.widget.graph.server.events.NodeEventType;
@@ -22,7 +23,9 @@ import com.vaadin.terminal.Sizeable;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.Button.ClickEvent;
 
 /**
  * @author mauro.monti
@@ -45,17 +48,32 @@ public class GraphWidgetApplication extends Application {
         horizontalSplitPanel.setSplitPosition(150, Sizeable.UNITS_PIXELS);
         horizontalSplitPanel.setSizeFull();
 
+        final Window mainWindow = new Window("NodeGraph Widget Application");
+        
+        final Button openWindow = new Button("Open diagram");
+        openWindow.addListener(new Button.ClickListener() {
+			@Override
+			public void buttonClick(ClickEvent event) {
+				final Window subwindow = new Window("A modal subwindow");
+				subwindow.setModal(true);
+				
+				final VerticalLayout layout = (VerticalLayout) subwindow.getContent();
+				layout.setMargin(true);
+				layout.setSpacing(true);
+
+				final GraphComponent nodeGraphWidget = getNodeGraph();		
+				layout.addComponent(nodeGraphWidget);
+				
+				mainWindow.addWindow(subwindow);
+			}
+		});
+        
         final HorizontalLayout hl = new HorizontalLayout();
         hl.setSizeFull();
         
-        horizontalSplitPanel.setFirstComponent(new Button("Do Magic!"));
+        horizontalSplitPanel.setFirstComponent(openWindow);
         horizontalSplitPanel.setSecondComponent(hl);
         
-		final Window mainWindow = new Window("NodeGraph Widget Application");
-		
-		final GraphComponent nodeGraphWidget = getNodeGraph();		
-		hl.addComponent(nodeGraphWidget);
-		
 		mainWindow.setContent(horizontalSplitPanel);
 		mainWindow.setSizeFull();
 
@@ -119,7 +137,7 @@ public class GraphWidgetApplication extends Application {
 		end.setLabel("End");
 
 		// = Custom nodes.
-		Node cn = new CustomNode("my-custom-node", "my-custom-node-identifier");
+		Node cn = new CustomNode("my-id", "or");
 		
 		// = Nodes meet nodes!.
 		final RelationStyle dashedBlue = new DefaultRelationStyle(GraphConstants.DOM.CSS_BLUE_VALUE, 2);
