@@ -18,7 +18,10 @@ import com.pantar.widget.graph.server.styles.RelationStyle;
 import com.pantar.widget.graph.shared.GraphConstants;
 import com.pantar.widget.graph.shared.component.RelationTypeEnum;
 import com.vaadin.Application;
+import com.vaadin.terminal.Sizeable;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Window;
 
 /**
@@ -37,14 +40,23 @@ public class GraphWidgetApplication extends Application {
 	 */
 	@Override
 	public void init() {
+		// Add a horizontal SplitPanel to the lower area
+        final HorizontalSplitPanel horizontalSplitPanel = new HorizontalSplitPanel();
+        horizontalSplitPanel.setSplitPosition(150, Sizeable.UNITS_PIXELS);
+        horizontalSplitPanel.setSizeFull();
+
+        final HorizontalLayout hl = new HorizontalLayout();
+        hl.setSizeFull();
+        
+        horizontalSplitPanel.setFirstComponent(new Button("Do Magic!"));
+        horizontalSplitPanel.setSecondComponent(hl);
+        
 		final Window mainWindow = new Window("NodeGraph Widget Application");
-		final HorizontalLayout hl = new HorizontalLayout();
-		hl.setSizeFull();
 		
 		final GraphComponent nodeGraphWidget = getNodeGraph();		
-
-		mainWindow.setContent(hl);
-		mainWindow.addComponent(nodeGraphWidget);
+		hl.addComponent(nodeGraphWidget);
+		
+		mainWindow.setContent(horizontalSplitPanel);
 		mainWindow.setSizeFull();
 
 		this.setMainWindow(mainWindow);
@@ -53,9 +65,9 @@ public class GraphWidgetApplication extends Application {
 	/**
 	 * @return
 	 */
-	private GraphComponent getNodeGraph() {
+	private static GraphComponent getNodeGraph() {
 		// = Retrive the model.
-		final GraphModel graphModel = this.getGraphModel();
+		final GraphModel graphModel = getGraphModel();
 		
 		final EventType[] eventTypes = { NodeEventType.SELECTED, NodeEventType.POSITION, GraphModelEventType.INITIALIZED };
 
@@ -86,7 +98,7 @@ public class GraphWidgetApplication extends Application {
 	/**
 	 * @return
 	 */
-	private GraphModel getGraphModel() {
+	private static GraphModel getGraphModel() {
 		// = Create the model.
 		final GraphModel graphModel = GraphModelFactory.getGraphModelInstance();
 		

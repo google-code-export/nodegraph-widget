@@ -22,4 +22,8 @@ public interface JSONProvider {
 	 */
 	void addExclusion(String pExpression);
 	
+	/**
+	 * @param pExpression
+	 */
+	void addExclusion(String[] pExpressions);
 }

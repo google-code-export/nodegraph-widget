@@ -52,4 +52,12 @@ public class DefaultJSONProvider implements JSONProvider {
 			this.excludeProperties.add(pExpression);
 		}
 	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	@Override
+	public void addExclusion(String[] pExpressions) {
+		this.excludeProperties.addAll(excludeProperties);
+	}
 }
