@@ -15,7 +15,7 @@ import com.pantar.widget.graph.server.events.GraphModelEventType;
 import com.pantar.widget.graph.server.events.GraphModelPropertyChangeSupport;
 import com.pantar.widget.graph.server.events.GraphModelPropertyChangeSupportImpl;
 import com.pantar.widget.graph.server.events.PropertyChangeCallback;
-import com.pantar.widget.graph.server.layout.GraphModelLayout;
+import com.pantar.widget.graph.server.layouts.GraphModelLayout;
 import com.pantar.widget.graph.server.styles.RelationStyle;
 import com.pantar.widget.graph.shared.component.RelationTypeEnum;
 
@@ -38,12 +38,12 @@ public class GraphModelImpl implements GraphModel, PropertyChangeListener {
     /**
      * 
      */
-    protected final Set<Node> nodes = new HashSet<Node>();
+    protected Set<Node> nodes = new HashSet<Node>();
     
     /**
      * 
      */
-    protected final Set<Relation> relations = new HashSet<Relation>();
+    protected Set<Relation> relations = new HashSet<Relation>();
 
     /**
      * 
@@ -163,7 +163,14 @@ public class GraphModelImpl implements GraphModel, PropertyChangeListener {
 	public Set<Node> getNodes() {
 		return this.nodes;
 	}
-
+	
+	/**
+	 * @param nodes
+	 */
+	protected void setNodes(Set<Node> nodes) {
+		this.nodes = nodes;
+	}
+	
 	/**
 	 * {@inheritdoc}
 	 */
@@ -172,6 +179,13 @@ public class GraphModelImpl implements GraphModel, PropertyChangeListener {
 		return this.relations;
 	}
 
+	/**
+	 * @param relations
+	 */
+	protected void setRelations(Set<Relation> relations) {
+		this.relations = relations;
+	}
+	
 	/**
 	 * {@inheritdoc}
 	 */

@@ -22,12 +22,16 @@ public class RelationTypeFactory {
 	 */
 	public static RelationType getRelation(final RelationTypeEnum pRelationTypeEnum, final RelationStyle pRelationStyle) {
 		AbstractRelationType relationType = null;
+
+		// = Create the relation type.		
 		if (RelationTypeEnum.LINE.equals(pRelationTypeEnum)) {
 			relationType = new LineRelationType();
 
 		} else if (RelationTypeEnum.BEZIER.equals(pRelationTypeEnum)) {
 			relationType = new BezierRelationType();
 		}
+
+		// = Apply Styles Properties to the relation.
 		relationType.applyAttributes(pRelationStyle);
 		
 		return relationType;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.pantar.widget.graph.server.layout;
+package com.pantar.widget.graph.server.layouts;
 
 import com.pantar.widget.graph.server.GraphModel;
 
@@ -14,6 +14,10 @@ public interface GraphModelLayout {
 	/**
 	 * @param pGraphModel
 	 */
-	public void layout(final GraphModel pGraphModel);
+	void layout(final GraphModel pGraphModel);
 	
+	/**
+	 * @return
+	 */
+	GraphModel getModel();
 }

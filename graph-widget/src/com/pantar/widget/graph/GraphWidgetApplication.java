@@ -2,12 +2,10 @@ package com.pantar.widget.graph;
 
 import java.beans.PropertyChangeEvent;
 
-import com.pantar.widget.graph.server.CustomNode;
 import com.pantar.widget.graph.server.DefaultNode;
 import com.pantar.widget.graph.server.GraphComponent;
 import com.pantar.widget.graph.server.GraphModel;
 import com.pantar.widget.graph.server.Node;
-import com.pantar.widget.graph.server.elements.AutomaticNode;
 import com.pantar.widget.graph.server.elements.BeginNode;
 import com.pantar.widget.graph.server.elements.EndNode;
 import com.pantar.widget.graph.server.elements.ProcessCreationNode;
@@ -17,7 +15,7 @@ import com.pantar.widget.graph.server.events.GraphModelEventType;
 import com.pantar.widget.graph.server.events.NodeEventType;
 import com.pantar.widget.graph.server.events.PropertyChangeCallback;
 import com.pantar.widget.graph.server.factories.GraphModelFactory;
-import com.pantar.widget.graph.server.layout.GraphModelRandomLayout;
+import com.pantar.widget.graph.server.layouts.GraphModelRandomLayout;
 import com.pantar.widget.graph.server.styles.DefaultRelationStyle;
 import com.pantar.widget.graph.server.styles.RelationStyle;
 import com.pantar.widget.graph.shared.GraphConstants;
@@ -25,11 +23,11 @@ import com.pantar.widget.graph.shared.component.RelationTypeEnum;
 import com.vaadin.Application;
 import com.vaadin.terminal.Sizeable;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.Button.ClickEvent;
 
 /**
  * @author mauro.monti
@@ -59,12 +57,15 @@ public class GraphWidgetApplication extends Application {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				final Window subwindow = new Window("Node Graph Widget");
+				subwindow.setWidth("850px");
+				subwindow.setHeight("500px");
 				subwindow.setModal(true);
 				
 				final VerticalLayout layout = (VerticalLayout) subwindow.getContent();
 				layout.setMargin(true);
 				layout.setSpacing(true);
-
+				layout.setSizeFull();
+				
 				final GraphComponent nodeGraphWidget = getNodeGraph();		
 				layout.addComponent(nodeGraphWidget);
 				

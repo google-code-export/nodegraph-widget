@@ -45,7 +45,17 @@ public class Relation {
 	 * 
 	 */
 	protected RelationStyle relationStyle;
+	
+	/**
+	 * 
+	 */
+	protected Point fromPoint;
 
+	/**
+	 * 
+	 */
+	protected Point toPoint;
+	
 	/**
 	 * @param pParent
 	 * @param pNodeFrom
@@ -107,8 +117,8 @@ public class Relation {
 		final double x2 = this.to.getCenterX();
 		final double y2 = this.to.getCenterY();
 
-		final Point fromPoint = new Point(x1, y1);
-		final Point toPoint = new Point(x2, y2);
+		this.fromPoint = new Point(x1, y1);
+		this.toPoint = new Point(x2, y2);
 
 		this.relationType.update(fromPoint, toPoint);
 	}
