@@ -8,7 +8,7 @@ import java.util.Set;
 
 import com.pantar.widget.graph.server.events.EventType;
 import com.pantar.widget.graph.server.events.PropertyChangeCallback;
-import com.pantar.widget.graph.server.layout.GraphModelLayout;
+import com.pantar.widget.graph.server.layouts.GraphModelLayout;
 import com.pantar.widget.graph.server.styles.RelationStyle;
 import com.pantar.widget.graph.shared.component.RelationTypeEnum;
 

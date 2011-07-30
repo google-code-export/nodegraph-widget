@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.pantar.widget.graph.server.layout;
+package com.pantar.widget.graph.server.layouts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,4 +47,8 @@ public class GraphModelRandomLayout implements GraphModelLayout {
 		}
 	}
 
+	@Override
+	public GraphModel getModel() {
+		return this.graphModel;
+	}
 }
