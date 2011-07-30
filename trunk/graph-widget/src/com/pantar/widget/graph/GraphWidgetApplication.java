@@ -54,6 +54,15 @@ public class GraphWidgetApplication extends Application {
         
         final Button openWindow = new Button("Open diagram");
         openWindow.addListener(new Button.ClickListener() {
+        	
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -1522261898787739587L;
+
+			/**
+			 * {@inheritdoc}
+			 */
 			@Override
 			public void buttonClick(ClickEvent event) {
 				final Window subwindow = new Window("Node Graph Widget");
