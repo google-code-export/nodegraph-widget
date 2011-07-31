@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Implementation-Title: NodeGraphWidget
+Implementation-Version: 0.1.23
+Vaadin-Package-Version: 1
+Vaadin-Widgetsets: com.pantar.widget.graph.GraphWidget
+Class-Path: 
+
